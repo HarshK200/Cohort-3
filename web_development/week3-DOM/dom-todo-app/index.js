@@ -1,4 +1,4 @@
-const todo = [];
+const todo = []; //state
 function addTodo() {
   const value = document.querySelector("#todo-input").value;
   todo.push(value);
@@ -19,8 +19,9 @@ function render(toRender) {
     span.innerHTML = value;
     const button = document.createElement("button");
     button.innerHTML = "Delete";
-    button.onclick = () => {
-      todoContainer.removeChild(li);
+    button.onclick = (e) => {
+      todo.pop(value);
+      render(todo);
     };
     li.appendChild(span);
     li.appendChild(button);
