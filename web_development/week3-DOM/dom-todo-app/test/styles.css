@@ -1,0 +1,15 @@
+ .progress-bar{
+    height: 40px;
+    width: 200px;
+    border: 1px solid black;
+    margin-bottom: 20px;
+}
+.bar{
+    height: 100%;
+     background-color: rgb(105, 233, 105);
+     width: 0px;
+  visibility: visible;
+}
+.strike{
+    text-decoration:line-through;
+}
