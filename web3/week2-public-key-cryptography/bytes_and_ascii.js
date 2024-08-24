@@ -28,23 +28,15 @@ function asciiToBytes(asciiString) {
 
 // console.log(new Uint8Array([255, 256])) // test to check the biggest 8 bit integer that can be stored in a 8 bit binary
 
-const bytes = new Uint8Array([104, 97, 114, 55, 50]);
+const bytes = new Uint8Array([72, 101, 108, 108, 111]);
 const encodedName = AsciiToUint8Array("harsh");
 const decodedName = Uint8ArrayToAscii(bytes);
 
 // -------------------------------------- CONSOLE LOGS -------------------------------------- //
-console.log(encodedName);
-console.log(decodedName);
-console.log(bytesToAscii1(bytes));
-console.log(asciiToBytes("harsh"));
-return;
-
 console.log("My name encoded: ", encodedName);
 console.log("My name decoded: ", decodedName);
+console.log(bytesToAscii1(bytes));
+console.log(asciiToBytes("harsh"));
 
-console.log(new TextDecoder().decode(new Uint8Array([114, 97, 115, 104])));
-
-console.log("hello".charCodeAt(3));
-
-String.fromCharCode(new Uint8Array([114]));
-console.log();
+// console.log("hello".charCodeAt(3));
+// String.fromCharCode(new Uint8Array([114]));
