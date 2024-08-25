@@ -2,8 +2,12 @@
 const TODOS = ["foo", "bar"];
 
 function OuterContainer(todos) {
+  const appName = document.createElement("h1");
+  appName.classList.add("app-name");
+  appName.innerText = "Simple Todo";
   const outerContainer = document.createElement("section");
   outerContainer.classList.add("outer-container");
+  outerContainer.appendChild(appName);
   outerContainer.appendChild(InputField());
   outerContainer.appendChild(Todos(todos));
   return outerContainer;
@@ -22,7 +26,7 @@ function InputField() {
   clearButton.innerText = "Clear Todo";
 
   const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("button-container")
+  buttonContainer.classList.add("button-Container");
   buttonContainer.appendChild(addButton);
   buttonContainer.appendChild(clearButton);
 

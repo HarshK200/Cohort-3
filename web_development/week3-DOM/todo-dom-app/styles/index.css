@@ -9,6 +9,8 @@
 body {
   font-family: sans-serif;
   margin: 0;
+  height: 100vh;
+  background-color: var(--primary-bg-color);
 }
 
 /*the main wrapper around all the content*/
@@ -17,6 +19,11 @@ body {
   flex-direction: column;
   align-items: center; /*along the main axis*/
   padding-top: 8rem;
+}
+
+.app-name {
+  color: white;
+  font-size: 3rem;
 }
 
 .input-field-container {
@@ -47,8 +54,9 @@ body {
   background-color: var(--primary-fg-color);
 }
 .input-field-container input {
-  width: clamp(175px, 15vw, 300px);
+  width: clamp(200px, 15vw, 300px);
   height: 30px;
+  outline: none;
 }
 
 .todo-container {
