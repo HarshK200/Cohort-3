@@ -9,6 +9,7 @@
   --primary-bg-color: #3c3d37;
   --secondary-fg-color: #697565;
   --primary-fg-color: #ecdfcc;
+  --catpuccin-peach: #fe640b;
 }
 
 body {
@@ -35,6 +36,7 @@ body {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 3fr 1fr 1fr;
+  gap: 1rem;
 }
 
 .input-container button {
@@ -59,18 +61,40 @@ body {
 }
 .input-container input {
   border: none;
-  background-color: var(--primary-fg-color);
   outline: none;
+  background-color: var(--primary-fg-color);
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .todo-container {
+  display: grid;
+  gap: 1rem;
+}
+
+.todo-item {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .todo-item .checkbox {
 }
 
 .todo-item .input-field {
-  background-color: white;
+  background-color: var(--primary-fg-color);
   border: none;
   border-radius: 2px;
+  height: 1.5rem;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.todo-item .delete-icon {
+  color: var(--catpuccin-peach);
+}
+
+.todo-item .delete-icon:hover {
+  color: red;
+  cursor: pointer;
 }

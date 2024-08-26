@@ -28,14 +28,14 @@ function Input() {
   addButton.innerText = "Add Todo";
   addButton.onclick = () => {
     TODOS.push(inputField.value);
-    render();
+    render(OuterContainer(TODOS));
   };
 
   const clearButton = document.createElement("button");
   clearButton.innerText = "Clear Todo";
   clearButton.onclick = () => {
     TODOS.length = 0;
-    render();
+    render(OuterContainer(TODOS));
   };
 
   inputContainer.appendChild(inputField);
@@ -55,26 +55,17 @@ function Todos(todos) {
     checkbox.type = "checkbox";
     checkbox.classList.add("checkbox");
     checkbox.onclick = () => {
-      checkbox.checked
-        ? (input.style.textDecoration = "line-through 3px")
-        : (input.style.textDecoration = "none");
-    };
+      render(OuterContainer(TODOS))
+    }
 
     const input = document.createElement("input");
     input.value = value;
     input.disabled = true;
     input.classList.add("input-field");
-
-    const deleteIcon = document.createElement("i");
-    deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
-    deleteIcon.onclick = () => {
-      TODOS.splice(key, 1);
-      render();
-    };
+    if (checkbox.checked) input.style.textDecoration = "line-through 3px";
 
     todoItem.appendChild(checkbox);
     todoItem.appendChild(input);
-    todoItem.appendChild(deleteIcon);
     return todoItem;
   }
 
@@ -86,12 +77,13 @@ function Todos(todos) {
   return todoContainer;
 }
 
-function render() {
+function render(component) {
   const root = document.getElementById("root");
   // Clear previous elements
   root.querySelectorAll("*").forEach((ele) => ele.remove());
   // re-render the whole thing
-  root.appendChild(OuterContainer(TODOS));
+  root.appendChild(component);
+  console.log(root);
 }
 
 render(OuterContainer(TODOS));
