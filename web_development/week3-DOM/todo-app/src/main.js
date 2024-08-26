@@ -1,21 +1,23 @@
+import "../styles/modern-normalize.css";
+import "../styles/style.css";
+
 // The State
 const TODOS = ["foo", "bar"];
 
 function OuterContainer(todos) {
   const appName = document.createElement("h1");
-  appName.classList.add("app-name");
   appName.innerText = "Simple Todo";
   const outerContainer = document.createElement("section");
   outerContainer.classList.add("outer-container");
   outerContainer.appendChild(appName);
-  outerContainer.appendChild(InputField());
+  outerContainer.appendChild(Input());
   outerContainer.appendChild(Todos(todos));
   return outerContainer;
 }
 
-function InputField() {
-  const inputFieldContainer = document.createElement("section");
-  inputFieldContainer.classList.add("input-field-container");
+function Input() {
+  const inputContainer = document.createElement("section");
+  inputContainer.classList.add("input-container");
 
   const inputField = document.createElement("input");
   inputField.type = "text";
@@ -25,15 +27,11 @@ function InputField() {
   const clearButton = document.createElement("button");
   clearButton.innerText = "Clear Todo";
 
-  const buttonContainer = document.createElement("div");
-  buttonContainer.classList.add("button-Container");
-  buttonContainer.appendChild(addButton);
-  buttonContainer.appendChild(clearButton);
+  inputContainer.appendChild(inputField);
+  inputContainer.appendChild(addButton);
+  inputContainer.appendChild(clearButton);
 
-  inputFieldContainer.appendChild(inputField);
-  inputFieldContainer.appendChild(buttonContainer);
-
-  return inputFieldContainer;
+  return inputContainer;
 }
 
 function Todos(todos) {

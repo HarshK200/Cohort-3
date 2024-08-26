@@ -1,0 +1,76 @@
+* {
+  margin: 0;
+  line-height: calc(1em + 0.5rem);
+}
+
+/*Global Collor pallet variables*/
+:root {
+  --secondary-bg-color: #1e201e;
+  --primary-bg-color: #3c3d37;
+  --secondary-fg-color: #697565;
+  --primary-fg-color: #ecdfcc;
+}
+
+body {
+  font-family: "Alpino", sans-serif;
+  height: 100vh;
+  background-color: var(--secondary-bg-color);
+}
+
+/*the main wrapper around all the content*/
+.outer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /*along the main axis*/
+}
+
+.outer-container h1 {
+  color: var(--primary-fg-color);
+  font-size: 3.5rem;
+  margin-top: 4rem;
+}
+
+.input-container {
+  margin: 4rem 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 3fr 1fr 1fr;
+}
+
+.input-container button {
+  font-weight: 900;
+  font-size: 18px;
+  margin: 0 0.5rem;
+  padding: 10px 25px;
+  border: none;
+  background-color: var(--secondary-fg-color);
+  border-bottom: 3px solid var(--primary-fg-color);
+  border-radius: 2px;
+  color: var(--primary-fg-color); /*Color is used for text color*/
+}
+.input-container button:hover {
+  cursor: pointer;
+  color: white;
+}
+.input-container button:active {
+  color: white;
+  border-bottom: 3px solid var(--primary-fg-color);
+  background-color: var(--primary-fg-color);
+}
+.input-container input {
+  border: none;
+  background-color: var(--primary-fg-color);
+  outline: none;
+}
+
+.todo-container {
+}
+
+.todo-item .checkbox {
+}
+
+.todo-item .input-field {
+  background-color: white;
+  border: none;
+  border-radius: 2px;
+}
