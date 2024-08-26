@@ -3,10 +3,7 @@ import "../styles/style.css";
 import "../styles/utils.css";
 
 // The State
-const TODOS = [
-  { value: "foo", isChecked: false, isEditing: false },
-  { value: "bar", isChecked: false, isEditing: false },
-];
+let TODOS = [];
 let focusedEleId = null;
 
 function OuterContainer(todos) {
@@ -35,6 +32,7 @@ function Input() {
   addButton.classList.add("btn", "add-btn");
   addButton.onclick = () => {
     TODOS.push({ value: inputField.value, isChecked: false, isEditing: false });
+    saveTodoDataLocal();
     render();
   };
 
@@ -43,6 +41,7 @@ function Input() {
   clearButton.classList.add("btn", "clear-btn");
   clearButton.onclick = () => {
     TODOS.length = 0;
+    saveTodoDataLocal();
     render();
   };
 
@@ -65,6 +64,7 @@ function Todos(todos) {
     input.classList.add("input-field");
     input.onchange = (e) => {
       item.value = e.target.value;
+      saveTodoDataLocal();
     };
 
     const checkbox = document.createElement("input");
@@ -75,6 +75,7 @@ function Todos(todos) {
     input.style.textDecoration = item.isChecked ? "line-through 3px" : "none";
     checkbox.onclick = () => {
       item.isChecked = checkbox.checked;
+      saveTodoDataLocal();
       render();
     };
 
@@ -83,6 +84,7 @@ function Todos(todos) {
     editIcon.onclick = () => {
       item.isEditing = true;
       focusedEleId = todoItem.id;
+      saveTodoDataLocal();
       render();
     };
 
@@ -91,6 +93,7 @@ function Todos(todos) {
     saveIcon.onclick = () => {
       item.isEditing = false;
       focusedEleId = null;
+      saveTodoDataLocal();
       render();
     };
 
@@ -98,6 +101,7 @@ function Todos(todos) {
     deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
     deleteIcon.onclick = () => {
       TODOS.splice(index, 1);
+      saveTodoDataLocal();
       render();
     };
 
@@ -119,6 +123,7 @@ function Todos(todos) {
 }
 
 function render() {
+  getTodosLocal();
   const root = document.getElementById("root");
   // Clear previous elements
   root.querySelectorAll("*").forEach((ele) => ele.remove());
@@ -134,3 +139,15 @@ function render() {
 }
 
 render(OuterContainer(TODOS));
+
+function saveTodoDataLocal() {
+  localStorage.setItem("todos", JSON.stringify(TODOS));
+}
+
+function getTodosLocal() {
+  const todos = localStorage.getItem("todos");
+  console.log(todos);
+  if (todos) {
+    TODOS = JSON.parse(todos);
+  }
+}

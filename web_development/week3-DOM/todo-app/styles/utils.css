@@ -5,17 +5,22 @@
   padding: 10px 25px;
   border: none;
   background-color: var(--secondary-fg-color);
-  border-bottom: 3px solid var(--primary-fg-color);
+  border-bottom: 3.5px solid var(--primary-fg-color);
   border-radius: 2px;
   color: var(--primary-fg-color); /*Color is used for text color*/
+  transition: color 0.3s;
 }
 
 .btn:hover {
   cursor: pointer;
   color: white;
+  transition: translateY 0.3s;
+  transition: background-color 0.3s ease-in-out;
 }
 
 .btn:active {
+  transform: translateY(3px);
+  border: none;
   color: white;
   border-bottom: 3px solid var(--primary-fg-color);
   background-color: var(--primary-fg-color);
