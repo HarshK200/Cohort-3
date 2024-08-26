@@ -21,6 +21,13 @@
   background-color: var(--primary-fg-color);
 }
 
+.clear-btn:hover {
+  color: var(--catpuccin-peach);
+}
+
+.add-btn {
+}
+
 .delete-icon {
   color: var(--catpuccin-peach);
 }

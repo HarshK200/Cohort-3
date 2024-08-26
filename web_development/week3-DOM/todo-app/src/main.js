@@ -7,6 +7,7 @@ const TODOS = [
   { value: "foo", isChecked: false, isEditing: false },
   { value: "bar", isChecked: false, isEditing: false },
 ];
+let focusedEleId = null;
 
 function OuterContainer(todos) {
   const outerContainer = document.createElement("section");
@@ -31,7 +32,7 @@ function Input() {
 
   const addButton = document.createElement("button");
   addButton.innerText = "Add Todo";
-  addButton.classList.add("btn");
+  addButton.classList.add("btn", "add-btn");
   addButton.onclick = () => {
     TODOS.push({ value: inputField.value, isChecked: false, isEditing: false });
     render();
@@ -39,7 +40,7 @@ function Input() {
 
   const clearButton = document.createElement("button");
   clearButton.innerText = "Clear Todo";
-  clearButton.classList.add("btn");
+  clearButton.classList.add("btn", "clear-btn");
   clearButton.onclick = () => {
     TODOS.length = 0;
     render();
@@ -81,6 +82,7 @@ function Todos(todos) {
     editIcon.classList.add("fa-solid", "fa-pen-to-square", "edit-icon");
     editIcon.onclick = () => {
       item.isEditing = true;
+      focusedEleId = todoItem.id;
       render();
     };
 
@@ -88,6 +90,7 @@ function Todos(todos) {
     saveIcon.classList.add("fa-solid", "fa-floppy-disk", "save-icon");
     saveIcon.onclick = () => {
       item.isEditing = false;
+      focusedEleId = null;
       render();
     };
 
@@ -121,6 +124,13 @@ function render() {
   root.querySelectorAll("*").forEach((ele) => ele.remove());
   // re-render the whole thing
   root.appendChild(OuterContainer(TODOS));
+  // setting the cursor to focused element if any
+  if (focusedEleId) {
+    const focusedInputEle = document
+      .querySelector(`#${focusedEleId}`)
+      .querySelector(".input-field");
+    focusedInputEle.focus();
+  }
 }
 
 render(OuterContainer(TODOS));

@@ -12,6 +12,7 @@
   --catpuccin-peach: #fe640b;
   --catpuccin-green: #40a02b;
   --catpuccin-teal: #179299;
+  --checkbox-accent-color: #e95420;
 }
 
 body {
@@ -38,7 +39,7 @@ body {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 3fr 1fr 1fr;
-  gap: 1rem;
+  grid-gap: 0 1rem;
 }
 
 .input-container input {
@@ -47,7 +48,7 @@ body {
   background-color: var(--primary-fg-color);
   font-size: 18px;
   font-weight: bold;
-  padding: 0 1rem;
+  padding: 0.5rem;
 }
 
 .input-container input::placeholder {
@@ -61,7 +62,7 @@ body {
 
 .todo-item {
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   align-items: center;
 }
 
@@ -72,4 +73,39 @@ body {
   height: 1.5rem;
   font-size: 20px;
   font-weight: bold;
+  padding: 1rem;
+}
+
+.todo-item .checkbox:checked {
+  accent-color: var(--checkbox-accent-color);
+}
+
+@media (max-width: 810px) and (min-width: 100px) {
+  .input-container {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1rem;
+    width: 24rem;
+  }
+
+  .input-container input {
+    grid-column: span 2;
+  }
+
+  .input-container button {
+    margin: 0;
+  }
+
+  .todo-container {
+    gap: 0.5rem;
+  }
+
+  .todo-item {
+    gap: 0.4rem;
+  }
+
+  .todo-item input {
+    padding: 0.5rem;
+  }
 }
