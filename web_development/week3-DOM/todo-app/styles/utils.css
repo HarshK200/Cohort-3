@@ -1,0 +1,47 @@
+.btn {
+  font-weight: 900;
+  font-size: 18px;
+  margin: 0 0.5rem;
+  padding: 10px 25px;
+  border: none;
+  background-color: var(--secondary-fg-color);
+  border-bottom: 3px solid var(--primary-fg-color);
+  border-radius: 2px;
+  color: var(--primary-fg-color); /*Color is used for text color*/
+}
+
+.btn:hover {
+  cursor: pointer;
+  color: white;
+}
+
+.btn:active {
+  color: white;
+  border-bottom: 3px solid var(--primary-fg-color);
+  background-color: var(--primary-fg-color);
+}
+
+.delete-icon {
+  color: var(--catpuccin-peach);
+}
+
+.delete-icon:hover {
+  color: red;
+  cursor: pointer;
+}
+
+.edit-icon {
+  color: var(--catpuccin-teal);
+}
+
+.edit-icon:hover {
+  cursor: pointer;
+}
+
+.save-icon {
+  color: var(--catpuccin-green);
+}
+
+.save-icon:hover {
+  cursor: pointer;
+}

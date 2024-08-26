@@ -1,8 +1,12 @@
 import "../styles/modern-normalize.css";
 import "../styles/style.css";
+import "../styles/utils.css";
 
 // The State
-const TODOS = ["foo", "bar"];
+const TODOS = [
+  { value: "foo", isChecked: false, isEditing: false },
+  { value: "bar", isChecked: false, isEditing: false },
+];
 
 function OuterContainer(todos) {
   const outerContainer = document.createElement("section");
@@ -23,16 +27,19 @@ function Input() {
 
   const inputField = document.createElement("input");
   inputField.type = "text";
+  inputField.placeholder = "Enter todo....";
 
   const addButton = document.createElement("button");
   addButton.innerText = "Add Todo";
+  addButton.classList.add("btn");
   addButton.onclick = () => {
-    TODOS.push(inputField.value);
+    TODOS.push({ value: inputField.value, isChecked: false, isEditing: false });
     render();
   };
 
   const clearButton = document.createElement("button");
   clearButton.innerText = "Clear Todo";
+  clearButton.classList.add("btn");
   clearButton.onclick = () => {
     TODOS.length = 0;
     render();
@@ -46,42 +53,64 @@ function Input() {
 }
 
 function Todos(todos) {
-  function Todo({ key, value }) {
+  function Todo({ index, item }) {
     const todoItem = document.createElement("div");
-    todoItem.id = `todoitem-${key}`;
+    todoItem.id = `todoitem-${index}`;
     todoItem.classList.add("todo-item");
+
+    const input = document.createElement("input");
+    input.value = item.value;
+    input.disabled = !item.isEditing;
+    input.classList.add("input-field");
+    input.onchange = (e) => {
+      item.value = e.target.value;
+    };
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.classList.add("checkbox");
+
+    checkbox.checked = item.isChecked;
+    input.style.textDecoration = item.isChecked ? "line-through 3px" : "none";
     checkbox.onclick = () => {
-      checkbox.checked
-        ? (input.style.textDecoration = "line-through 3px")
-        : (input.style.textDecoration = "none");
+      item.isChecked = checkbox.checked;
+      render();
     };
 
-    const input = document.createElement("input");
-    input.value = value;
-    input.disabled = true;
-    input.classList.add("input-field");
+    const editIcon = document.createElement("i");
+    editIcon.classList.add("fa-solid", "fa-pen-to-square", "edit-icon");
+    editIcon.onclick = () => {
+      item.isEditing = true;
+      render();
+    };
+
+    const saveIcon = document.createElement("i");
+    saveIcon.classList.add("fa-solid", "fa-floppy-disk", "save-icon");
+    saveIcon.onclick = () => {
+      item.isEditing = false;
+      render();
+    };
 
     const deleteIcon = document.createElement("i");
     deleteIcon.classList.add("fa-solid", "fa-trash", "delete-icon");
     deleteIcon.onclick = () => {
-      TODOS.splice(key, 1);
+      TODOS.splice(index, 1);
       render();
     };
 
     todoItem.appendChild(checkbox);
     todoItem.appendChild(input);
+    item.isEditing
+      ? todoItem.appendChild(saveIcon)
+      : todoItem.appendChild(editIcon);
     todoItem.appendChild(deleteIcon);
     return todoItem;
   }
 
   const todoContainer = document.createElement("section");
   todoContainer.classList.add("todo-container");
-  todos.map((value, key) => {
-    todoContainer.appendChild(Todo({ key, value }));
+  todos.map((item, index) => {
+    todoContainer.appendChild(Todo({ index, item }));
   });
   return todoContainer;
 }

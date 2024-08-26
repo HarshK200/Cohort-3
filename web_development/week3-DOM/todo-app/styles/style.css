@@ -10,6 +10,8 @@
   --secondary-fg-color: #697565;
   --primary-fg-color: #ecdfcc;
   --catpuccin-peach: #fe640b;
+  --catpuccin-green: #40a02b;
+  --catpuccin-teal: #179299;
 }
 
 body {
@@ -39,32 +41,17 @@ body {
   gap: 1rem;
 }
 
-.input-container button {
-  font-weight: 900;
-  font-size: 18px;
-  margin: 0 0.5rem;
-  padding: 10px 25px;
-  border: none;
-  background-color: var(--secondary-fg-color);
-  border-bottom: 3px solid var(--primary-fg-color);
-  border-radius: 2px;
-  color: var(--primary-fg-color); /*Color is used for text color*/
-}
-.input-container button:hover {
-  cursor: pointer;
-  color: white;
-}
-.input-container button:active {
-  color: white;
-  border-bottom: 3px solid var(--primary-fg-color);
-  background-color: var(--primary-fg-color);
-}
 .input-container input {
   border: none;
   outline: none;
   background-color: var(--primary-fg-color);
   font-size: 18px;
   font-weight: bold;
+  padding: 0 1rem;
+}
+
+.input-container input::placeholder {
+  font-weight: 500;
 }
 
 .todo-container {
@@ -78,9 +65,6 @@ body {
   align-items: center;
 }
 
-.todo-item .checkbox {
-}
-
 .todo-item .input-field {
   background-color: var(--primary-fg-color);
   border: none;
@@ -88,13 +72,4 @@ body {
   height: 1.5rem;
   font-size: 20px;
   font-weight: bold;
-}
-
-.todo-item .delete-icon {
-  color: var(--catpuccin-peach);
-}
-
-.todo-item .delete-icon:hover {
-  color: red;
-  cursor: pointer;
 }
