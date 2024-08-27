@@ -1,3 +1,4 @@
+"use client"
 import styles from "./Onbaording.module.css";
 import React from "react";
 import SelectBlockchain from "@/components/SelectNetwork/SelectNetwork";

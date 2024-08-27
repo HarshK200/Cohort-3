@@ -2,14 +2,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import styles from "./selectNetwork.module.css";
 import { SolanaLogo } from "@public/index";
+import { EtheriumLogo } from "@public/index";
 
 interface SelectBlockchainProps {
   setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
   currentComponent: number;
 }
+interface blockchain {
+  name: string;
+  logo: any;
+}
+interface BlockchainContainerProps {
+  blockchain: blockchain;
+}
 
 const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, setCurrentComponent }) => {
-  const supportedBlockhains = ["Solana", "Etherium"];
+  const supportedBlockhains = [
+    { name: "Solana", logo: <SolanaLogo className={styles.solanaLogo} /> },
+    { name: "Etherium", logo: <EtheriumLogo className={styles.etheriumLogo} /> },
+  ];
 
   return (
     <main className={`${styles.main}`}>
@@ -25,8 +36,8 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
       <h1>Select Blockchain</h1>
       <p>We support mulitple blockchains, you can add more later.</p>
       <div className={styles.blockchainContainer}>
-        {supportedBlockhains.map((blockchainName: string) => {
-          return <BlockchainContainer blockchainName={blockchainName} />;
+        {supportedBlockhains.map((blockchain: blockchain) => {
+          return <BlockchainContainer blockchain={blockchain} />;
         })}
       </div>
     </main>
@@ -35,17 +46,11 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
 
 export default SelectBlockchain;
 
-interface BlockchainContainerProps {
-  blockchainName: string;
-  // blockchainIcon: SVGRect;
-}
-
-const BlockchainContainer: React.FC<BlockchainContainerProps> = ({ blockchainName }) => {
+const BlockchainContainer: React.FC<BlockchainContainerProps> = ({ blockchain }) => {
   return (
-    <div className={styles.blockchainBlock}>
-      {/*<svg>blockchainIcon</svg>*/}
-      <h2>{blockchainName}</h2>
-      <SolanaLogo />
+    <div className={styles.blockchainBlock} onClick={() => {}}>
+      {blockchain.logo}
+      <h2>{blockchain.name}</h2>
     </div>
   );
 };

@@ -33,6 +33,9 @@
 }
 
 .blockchainBlock {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
   background-color: var(--bg-compilent-color);
   font-size: 12px;
   border-radius: 1rem;
@@ -47,4 +50,14 @@
 
 .blockchainBlock h2 {
   font-weight: 500;
+}
+
+.solanaLogo {
+  width: 40px;
+  height: 40px;
+}
+
+.etheriumLogo {
+  width: 40px;
+  height: 40px;
 }

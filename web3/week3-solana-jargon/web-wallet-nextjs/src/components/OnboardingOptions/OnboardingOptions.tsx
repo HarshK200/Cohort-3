@@ -5,10 +5,7 @@ interface ComponentProps {
   currentComponent: number;
 }
 
-const OnboardingOptions: React.FC<ComponentProps> = ({
-  currentComponent,
-  setCurrentComponent,
-}) => {
+const OnboardingOptions: React.FC<ComponentProps> = ({ currentComponent, setCurrentComponent }) => {
   return (
     <main className={`${styles.btnContainer}`}>
       <button
