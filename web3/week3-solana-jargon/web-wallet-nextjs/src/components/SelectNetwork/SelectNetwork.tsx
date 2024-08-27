@@ -1,19 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
-import styles from "./selectNetwork.module.css";
 import { SolanaLogo } from "@public/index";
 import { EtheriumLogo } from "@public/index";
+import styles from "./selectNetwork.module.css";
 
 interface SelectBlockchainProps {
   setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
   currentComponent: number;
 }
-interface blockchain {
-  name: string;
-  logo: any;
-}
-interface BlockchainContainerProps {
-  blockchain: blockchain;
+interface BlockchainContainerProps extends SelectBlockchainProps {
+  blockchain: { name: string; logo: any };
 }
 
 const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, setCurrentComponent }) => {
@@ -26,7 +22,7 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
     <main className={`${styles.main}`}>
       <FontAwesomeIcon
         icon={faArrowLeft}
-        className={styles.leftArrow}
+        className="navigateLeftArrow"
         onClick={() => {
           if (currentComponent > 0) {
             setCurrentComponent(currentComponent - 1);
@@ -36,8 +32,15 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
       <h1>Select Blockchain</h1>
       <p>We support mulitple blockchains, you can add more later.</p>
       <div className={styles.blockchainContainer}>
-        {supportedBlockhains.map((blockchain: blockchain) => {
-          return <BlockchainContainer blockchain={blockchain} />;
+        {supportedBlockhains.map((blockchain: BlockchainContainerProps["blockchain"], index: number) => {
+          return (
+            <BlockchainContainer
+              key={index}
+              blockchain={blockchain}
+              currentComponent={currentComponent}
+              setCurrentComponent={setCurrentComponent}
+            />
+          );
         })}
       </div>
     </main>
@@ -46,9 +49,18 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
 
 export default SelectBlockchain;
 
-const BlockchainContainer: React.FC<BlockchainContainerProps> = ({ blockchain }) => {
+const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
+  blockchain,
+  currentComponent,
+  setCurrentComponent,
+}) => {
   return (
-    <div className={styles.blockchainBlock} onClick={() => {}}>
+    <div
+      className={styles.blockchainBlock}
+      onClick={() => {
+        setCurrentComponent(currentComponent + 1);
+      }}
+    >
       {blockchain.logo}
       <h2>{blockchain.name}</h2>
     </div>

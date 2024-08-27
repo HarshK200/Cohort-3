@@ -5,11 +5,11 @@
 .btn {
   color: var(--accent-color);
   border: none;
-  padding: 0.7rem 6rem;
+  padding: 0.9rem 8rem;
   cursor: pointer;
   border-radius: 0.5rem;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 ::-webkit-scrollbar {
@@ -24,4 +24,14 @@
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--bg-compilent-color);
+}
+
+.navigateLeftArrow {
+  cursor: pointer;
+  position: relative;
+  top: 4.5rem;
+  right: 18rem;
+  padding: 0.5rem;
+  height: 23px;
+  /* border-radius: 45px; */
 }
