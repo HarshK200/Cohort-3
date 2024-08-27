@@ -1,3 +1,4 @@
+// import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 import { generateMnemonic, mnemonicToSeedSync } from "bip39";
 
 function main() {
@@ -8,3 +9,5 @@ function main() {
 }
 
 main()
+
+// console.log(LAMPORTS_PER_SOL);

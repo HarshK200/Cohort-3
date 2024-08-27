@@ -1,0 +1,36 @@
+.btnContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.createButton {
+  background-color: var(--call-to-action);
+  transition: opacity 0.15s;
+}
+
+.createButton:hover {
+  opacity: 70%;
+}
+
+.createButton:active {
+  opacity: 60%;
+}
+
+.importButton {
+  background-color: var(--bg-compilent-color);
+  transition: opacity 0.15s;
+  border: 1px solid black;
+}
+
+.importButton:hover {
+  border: 1px solid #334155;
+  opacity: 80%;
+}
+
+.importButton:active {
+  opacity: 60%;
+}

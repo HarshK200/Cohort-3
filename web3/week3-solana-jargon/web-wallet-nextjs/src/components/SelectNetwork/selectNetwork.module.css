@@ -1,0 +1,50 @@
+.main {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 18px;
+  color: white;
+}
+
+.main h1 {
+  font-weight: 500;
+  padding: 1.5rem 0;
+}
+
+.main p {
+  font-size: 16px;
+}
+
+.leftArrow {
+  cursor: pointer;
+  position: absolute;
+  top: 2rem;
+  left: 0;
+  padding: 0.5rem;
+  border-radius: 45px;
+}
+
+.blockchainContainer {
+  display: grid;
+  grid-gap: 1rem 0;
+  padding: 4.5rem 1rem;
+  width: 70%;
+}
+
+.blockchainBlock {
+  background-color: var(--bg-compilent-color);
+  font-size: 12px;
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+  transition: opacity 0.25s;
+  cursor: pointer;
+}
+
+.blockchainBlock:hover {
+  opacity: 50%;
+}
+
+.blockchainBlock h2 {
+  font-weight: 500;
+}

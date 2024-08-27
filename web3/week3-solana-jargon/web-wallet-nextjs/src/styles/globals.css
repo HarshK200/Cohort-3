@@ -1,0 +1,19 @@
+:root {
+  --bg-dominant-color: #0d0d0d; /* 60 */
+  --bg-compilent-color: #1f292e; /* 30 */
+  --call-to-action: #f49431; /* 10 */
+  --accent-color: #e6f4f1; /*accent*/
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+body {
+  height: 100vh;
+  background: var(--bg-dominant-color);
+  display: grid;
+  place-items: center;
+}
