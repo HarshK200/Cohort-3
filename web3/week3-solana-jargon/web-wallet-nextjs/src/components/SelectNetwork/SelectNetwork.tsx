@@ -56,7 +56,7 @@ const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
 }) => {
   return (
     <div
-      className={styles.blockchainBlock}
+      className={`${styles.blockchainBlock} glass`}
       onClick={() => {
         setCurrentComponent(currentComponent + 1);
       }}

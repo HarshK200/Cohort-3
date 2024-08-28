@@ -11,12 +11,12 @@ const OnboardingOptions: React.FC<ComponentProps> = ({ currentComponent, setCurr
       <button
         className={`btn ${styles.createButton}`}
         onClick={() => {
-          setCurrentComponent(currentComponent + 1);
+          setCurrentComponent(1);
         }}
       >
         Create wallet
       </button>
-      <button className={`btn ${styles.importButton}`}>Import wallet</button>
+      <button className={`btn glass ${styles.importButton}`}>Import wallet</button>
     </main>
   );
 };

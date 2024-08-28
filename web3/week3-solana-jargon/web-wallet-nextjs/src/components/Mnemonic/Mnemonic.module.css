@@ -11,17 +11,34 @@
   padding: 1.7rem 0;
 }
 
-.wordsGird {
+.warningText {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+.warningSign {
+  color: yellow;
+  padding: 1rem;
+}
+
+.wordsGrid {
   /* background-color: var(--bg-compilent-color); */
-  height: 16rem;
+  height: 14rem;
   width: 45rem;
-  margin-top: 3rem;
+  margin-top: 2rem;
   padding: 1rem;
   border-radius: 0.5rem;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 0rem 1.5rem;
+  grid-gap: 0rem 1rem;
   cursor: pointer;
+  transition: opacity 0.15s;
+  /* filter: blur(8px); */
+}
+
+.wordsGrid:hover {
+  opacity: 70%;
 }
 
 .wordBox {
@@ -34,4 +51,47 @@
   color: var(--accent-color);
   padding: 0.5rem 0.8rem;
   border-radius: 0.4rem;
+}
+
+.blur {
+  filter: blur(4px);
+}
+
+.infoText {
+  padding-bottom: 1rem;
+  font-size: 14px;
+}
+
+.nextbtn {
+  font-size: 16px;
+  padding: 0.7rem 3.5rem;
+  margin: 1rem 0;
+  text-decoration: none;
+}
+
+.nextbtn:hover {
+  transition: opacity 0.15s;
+  opacity: 70%;
+}
+
+.disabled {
+  opacity: 50%;
+  pointer-events: none;
+}
+
+.confirmContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.checkbox {
+  width: 14px;
+  height: 14px;
+  padding: 0.4rem;
+  border: 2px solid white;
+  background: black; /* Set the background color to black */
+  cursor: pointer;
+  position: relative; /* For positioning the checkmark */
 }

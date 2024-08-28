@@ -21,7 +21,7 @@
 }
 
 .importButton {
-  background-color: var(--bg-compilent-color);
+  /* background-color: var(--bg-compilent-color); */
   transition: opacity 0.15s;
   border: 1px solid black;
 }
