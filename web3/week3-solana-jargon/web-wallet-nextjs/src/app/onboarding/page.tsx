@@ -1,8 +1,9 @@
-import styles from "./Onbaording.module.css";
+"use client"
+import styles from "./page.module.css";
 import React from "react";
-import SelectBlockchain from "@/components/SelectNetwork/SelectNetwork";
-import OnboardingOptions from "@/components/OnboardingOptions/OnboardingOptions";
-import Mnemonics from "../Mnemonic/Mnemonic";
+import SelectBlockchain from "@components/SelectNetwork/SelectNetwork";
+import OnboardingOptions from "@components/OnboardingOptions/OnboardingOptions";
+import Mnemonics from "@components/Mnemonic/Mnemonic";
 
 const Onboarding = () => {
   const [currentComponent, setCurrentComponent] = React.useState<number>(0);

@@ -1,14 +1,16 @@
 "use client";
 import React from "react";
 import styles from "./page.module.css";
-import Onboarding from "@/components/Onboarding/Onboarding";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
-  return (
-    <main className={`container ${styles.main}`}>
-      <Onboarding />
-    </main>
-  );
+  const router = useRouter();
+  const secureUsers = localStorage.getItem("secureusers");
+  if (!secureUsers) {
+    router.push("/onboarding");
+  }
+
+  return <main className={`container ${styles.main}`}></main>;
 };
 
 export default Home;

@@ -1,3 +1,4 @@
+"use client"
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
@@ -5,11 +6,6 @@ import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Mnemonic.module.css";
 import axios from "axios";
 import Link from "next/link";
-
-interface MnemonicsComponentProps {
-  setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
-  currentComponent: number;
-}
 
 const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent }) => {
   const [mnemonic, setMnemonic] = React.useState<string[]>();
@@ -88,10 +84,6 @@ const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCur
     </main>
   );
 };
-
-interface MnemonicComponentProps {
-  mnemonic: string;
-}
 
 const Mnemonic: React.FC<MnemonicComponentProps> = ({ mnemonic }) => {
   return (
