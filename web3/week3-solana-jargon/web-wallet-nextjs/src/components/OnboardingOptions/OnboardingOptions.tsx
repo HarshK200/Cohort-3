@@ -1,11 +1,6 @@
 import styles from "./OnboardingOptions.module.css";
 
-interface ComponentProps {
-  setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
-  currentComponent: number;
-}
-
-const OnboardingOptions: React.FC<ComponentProps> = ({ currentComponent, setCurrentComponent }) => {
+const OnboardingOptions: React.FC<OnboardingOptsComponentProps> = ({ currentComponent, setCurrentComponent }) => {
   return (
     <main className={`${styles.btnContainer}`}>
       <button

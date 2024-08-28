@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 
 const Home = () => {
   const router = useRouter();
-  const secureUsers = localStorage.getItem("secureusers");
-  if (!secureUsers) {
-    router.push("/onboarding");
-  }
+  React.useEffect(() => {
+    const secureUsers = localStorage.getItem("secureusers");
+    if (!secureUsers) {
+      router.push("/onboarding");
+    }
+  }, []);
 
   return <main className={`container ${styles.main}`}></main>;
 };

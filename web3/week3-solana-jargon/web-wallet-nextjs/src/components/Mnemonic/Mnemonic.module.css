@@ -49,7 +49,7 @@
   justify-content: center;
   align-items: center;
   background-color: var(--bg-compilent-color);
-  color: var(--accent-color);
+  color: white;
   padding: 0.5rem 0.8rem;
   border-radius: 0.4rem;
 }

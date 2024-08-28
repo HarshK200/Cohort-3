@@ -2,7 +2,7 @@
   --bg-dominant-color: #0d0d0d; /* 60 */
   --bg-compilent-color: #1f292e; /* 30 */
   --call-to-action: #f49431; /* 10 */
-  --accent-color: #e6f4f1; /*accent*/
+  --info-blue: #2091eb;
 }
 
 * {
@@ -26,4 +26,3 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.18);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
-

@@ -4,14 +4,6 @@ import { SolanaLogo } from "@public/index";
 import { EtheriumLogo } from "@public/index";
 import styles from "./selectNetwork.module.css";
 
-interface SelectBlockchainProps {
-  setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
-  currentComponent: number;
-}
-interface BlockchainContainerProps extends SelectBlockchainProps {
-  blockchain: { name: string; logo: any };
-}
-
 const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, setCurrentComponent }) => {
   const supportedBlockhains = [
     { name: "Solana", logo: <SolanaLogo className={styles.solanaLogo} /> },
@@ -58,7 +50,7 @@ const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
     <div
       className={`${styles.blockchainBlock} glass`}
       onClick={() => {
-        setCurrentComponent(currentComponent + 1);
+        setCurrentComponent(2);
       }}
     >
       {blockchain.logo}

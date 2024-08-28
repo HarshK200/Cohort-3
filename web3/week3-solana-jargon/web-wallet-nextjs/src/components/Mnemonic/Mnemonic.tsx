@@ -1,24 +1,15 @@
-"use client"
+"use client";
 import React, { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Mnemonic.module.css";
 import axios from "axios";
-import Link from "next/link";
 
-const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent }) => {
-  const [mnemonic, setMnemonic] = React.useState<string[]>();
+const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent, mnemonic }) => {
   const [wordsHidden, setWordsHidden] = React.useState<boolean>(true);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
   const [isChecked, setIsChecked] = React.useState<boolean>(false);
-
-  useEffect(() => {
-    axios.get("/api/generatemnemonic").then((response) => {
-      setMnemonic(response.data.mnemonic);
-      // console.log(response.data);
-    });
-  }, []);
 
   return (
     <main className={styles.main}>
@@ -72,15 +63,15 @@ const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCur
         />
         <label htmlFor="confirmCheckbox">I have saved my seed phrase</label>
       </div>
-      <Link
-        href={"/wallet"}
+      <button
         className={`btn ${styles.nextbtn} glass ${isChecked ? "" : styles.disabled}`}
         onClick={() => {
           localStorage.setItem("mnemonic", JSON.stringify(mnemonic));
+          setCurrentComponent(3);
         }}
       >
         Next
-      </Link>
+      </button>
     </main>
   );
 };
