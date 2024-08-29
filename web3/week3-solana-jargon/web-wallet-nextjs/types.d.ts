@@ -10,7 +10,7 @@ interface SelectBlockchainProps {
   setSelectedBlockchain: React.Dispatch<React.SetStateAction<supportedBlockchains>>;
 }
 interface BlockchainContainerProps extends SelectBlockchainProps {
-  blockchain: { name: string; id: supportedBlockchains; logo: any };
+  blockchain: { name: supportedBlockchains; logo: any };
 }
 
 interface MnemonicsComponentProps {
@@ -25,6 +25,7 @@ interface MnemonicComponentProps {
 
 interface CreatePassCompProps {
   mnemonic: string[] | undefined;
+  selectedBlockhain: supportedBlockchains;
 }
 
 interface getEncryptedMnemonicReqData {
@@ -32,9 +33,16 @@ interface getEncryptedMnemonicReqData {
   mnemonic: string[];
 }
 
+interface wallet {
+  blockchain_type: string; // would be somthing like [Solana, Etherium]
+  public_key: string;
+  encrypted_private_key: string;
+}
+
 interface secureUser {
   accountId: number;
   encryptedMnemonic: string;
+  wallets: wallet[];
 }
 
 interface generatemnemonic_ResponseData {
@@ -42,5 +50,10 @@ interface generatemnemonic_ResponseData {
 }
 
 interface generateAccount_RequestData {
+  nextAvilAccountId: number;
   mnemonic: string[];
+  password: string;
+  blockchain_type: supportedBlockchains;
 }
+
+interface generateAccount_ResponseData extends secureUser {}

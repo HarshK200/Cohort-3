@@ -6,8 +6,8 @@ import styles from "./selectNetwork.module.css";
 import { supportedBlockchains } from "@/enums";
 
 const supportedBlockhains = [
-  { name: "Solana", id: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
-  { name: "Etherium", id: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
+  { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
+  { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
 ];
 
 const SelectBlockchain: React.FC<SelectBlockchainProps> = ({

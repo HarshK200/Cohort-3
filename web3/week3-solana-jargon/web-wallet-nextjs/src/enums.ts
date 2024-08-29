@@ -1,4 +1,4 @@
 export enum supportedBlockchains {
-  Solana,
-  Etherium,
+  Solana = "Solana",
+  Etherium = "Etherium",
 }

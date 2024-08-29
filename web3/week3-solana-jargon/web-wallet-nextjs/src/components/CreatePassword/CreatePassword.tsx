@@ -7,7 +7,7 @@ import { PuffLoader } from "react-spinners";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic }) => {
+const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
   const [password, setPassword] = React.useState<string>("");
   const [cnfPassword, setCnfPassword] = React.useState<string>("");
@@ -30,13 +30,16 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic }) => {
     // When user is onboaring for the first time
 
     if (!localStorage.getItem("secureUsers")) {
-      const reqData = {};
-      const response = await axios.post("/api/get-encrypted-mnemonic", { password, mnemonic });
-      // const secureusers: secureUser[] = [];
-      // secureusers.push({
-      //   accountId: 0,
-      //   encryptedMnemonic: encryptedMnemonic,
-      // });
+      const reqData: generateAccount_RequestData = {
+        nextAvilAccountId: 0,
+        password: password,
+        mnemonic: mnemonic!,
+        blockchain_type: selectedBlockhain,
+      };
+      const response = await axios.post("/api/generateAccount", reqData);
+      // const generateUser = response.
+      const secureusers: secureUser[] = [];
+      secureusers.push();
       // localStorage.setItem("secureUsers", JSON.stringify(secureusers));
     } else {
       // const secureusers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers") || "[]") as secureUser[];

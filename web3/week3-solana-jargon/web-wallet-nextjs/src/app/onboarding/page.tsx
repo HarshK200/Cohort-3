@@ -29,7 +29,7 @@ const Onboarding = () => {
       setSelectedBlockchain={setSelectedBlockchain}
     />,
     <Mnemonics currentComponent={currentComponent} setCurrentComponent={setCurrentComponent} mnemonic={mnemonic} />,
-    <CreatePassword mnemonic={mnemonic} />,
+    <CreatePassword mnemonic={mnemonic} selectedBlockhain={selectedBlockhain} />,
   ];
 
   return <div className={`${styles.onboardingContainer}`}>{components[currentComponent]}</div>;
