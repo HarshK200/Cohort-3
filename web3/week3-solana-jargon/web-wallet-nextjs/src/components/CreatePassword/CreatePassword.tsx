@@ -25,10 +25,8 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormSubmitted(true);
-    // const encryptedMnemonic: string = response.data.encryptedMnemonic;
 
     // When user is onboaring for the first time
-
     if (!localStorage.getItem("secureUsers")) {
       const reqData: generateAccount_RequestData = {
         nextAvilAccountId: 0,
@@ -37,10 +35,14 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         blockchain_type: selectedBlockhain,
       };
       const response = await axios.post("/api/generateAccount", reqData);
-      const newSecureUser = response.data as secureUser;
+      const hashed_pass = response.data.hashed_pass;
+      const newSecureUser = response.data.secureuser as secureUser;
       const secureusers: secureUser[] = [newSecureUser];
       localStorage.setItem("secureUsers", JSON.stringify(secureusers));
-    } else {
+      localStorage.setItem("hashed_pass", hashed_pass);
+    }
+    // when user already has account and creating a new on
+    else {
       const secureUsers = JSON.parse(localStorage.getItem("secureUsers")!) as secureUser[];
       const nextAvilId: number = secureUsers.length;
       const reqData: generateAccount_RequestData = {

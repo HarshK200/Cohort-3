@@ -1,15 +1,42 @@
+"use client";
 import React from "react";
 import styles from "./EnterPasword.module.css";
 import { PuffLoader } from "react-spinners";
 import { FormEvent } from "react";
+import * as bcrypt from "bcryptjs";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const EnterPassword = () => {
   const [password, setPassword] = React.useState<string>("");
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
+  const router = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormSubmitted(true);
+    const hashed_pass = localStorage.getItem("hashed_pass");
+    if (hashed_pass) {
+      bcrypt.compare(password, hashed_pass).then((correct) => {
+        if (correct) {
+          localStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
+        } else {
+          toast.error("Incorrect password!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          setFormSubmitted(false);
+        }
+      });
+    } else {
+      router.push("/onboarding");
+    }
   };
 
   return (

@@ -6,6 +6,13 @@ import { mnemonicToSeed, mnemonicToSeedSync } from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { supportedBlockchains } from "@/enums";
 import bs58 from "bs58";
+import bcrypt from "bcryptjs";
+
+async function getHashedPass(password: string) {
+  const saltrounds = 10;
+  const hasded_pass = await bcrypt.hash(password, saltrounds);
+  return hasded_pass;
+}
 
 function generateForSolana(mnemonic_words_array: string[]): { publickey: string; privatekey: string } {
   const mnemonic = mnemonic_words_array.join(" ");
@@ -20,6 +27,8 @@ function generateForSolana(mnemonic_words_array: string[]): { publickey: string;
 
   return { publickey, privatekey };
 }
+
+// Todo Add support for etherium
 
 export async function POST(req: NextRequest) {
   const { nextAvilAccountId, password, mnemonic, blockchain_type } = (await req.json()) as generateAccount_RequestData;
@@ -43,7 +52,11 @@ export async function POST(req: NextRequest) {
       wallets: [newWallet],
     };
 
-    const response: generateAccount_ResponseData = newSecureUser;
+    const secureuser: generateAccount_ResponseData = newSecureUser;
+    const response = {
+      hashed_pass: await getHashedPass(password),
+      secureuser: secureuser,
+    };
 
     return new NextResponse(JSON.stringify(response), {
       status: 200,
