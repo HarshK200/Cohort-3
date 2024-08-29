@@ -25,10 +25,28 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic }) => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormSubmitted(true);
-    const response = await axios.post("/api/get-encrypted-mnemonic", { password, mnemonic });
-    const encryptedMnemonic = response.data.encryptedMnemonic;
-    localStorage.removeItem("mnemonic");
-    localStorage.setItem("encryptedMnemonic", encryptedMnemonic);
+    // const encryptedMnemonic: string = response.data.encryptedMnemonic;
+
+    // When user is onboaring for the first time
+
+    if (!localStorage.getItem("secureUsers")) {
+      const reqData = {};
+      const response = await axios.post("/api/get-encrypted-mnemonic", { password, mnemonic });
+      // const secureusers: secureUser[] = [];
+      // secureusers.push({
+      //   accountId: 0,
+      //   encryptedMnemonic: encryptedMnemonic,
+      // });
+      // localStorage.setItem("secureUsers", JSON.stringify(secureusers));
+    } else {
+      // const secureusers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers") || "[]") as secureUser[];
+      // secureusers.push({
+      //   accountId: secureusers.length,
+      //   encryptedMnemonic: encryptedMnemonic,
+      // });
+      // localStorage.setItem("secureUsers", JSON.stringify(secureusers));
+    }
+
     setFormSubmitted(false);
     router.push("/wallet");
   };
@@ -41,7 +59,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic }) => {
           <FontAwesomeIcon icon={faInfoCircle} className={styles.infoIcon} />
           <h3>This is your local password</h3>
         </div>
-        <p>We do not save any sensitive user information in our database</p>
+        <p>We do not save any sensitive information in our database</p>
         <input
           type="password"
           className={styles.passInput}

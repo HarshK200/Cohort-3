@@ -6,9 +6,11 @@ interface OnboardingOptsComponentProps {
 interface SelectBlockchainProps {
   setCurrentComponent: React.Dispatch<React.SetStateAction<number>>;
   currentComponent: number;
+  selectedBlockhain: supportedBlockchains;
+  setSelectedBlockchain: React.Dispatch<React.SetStateAction<supportedBlockchains>>;
 }
 interface BlockchainContainerProps extends SelectBlockchainProps {
-  blockchain: { name: string; logo: any };
+  blockchain: { name: string; id: supportedBlockchains; logo: any };
 }
 
 interface MnemonicsComponentProps {
@@ -27,5 +29,18 @@ interface CreatePassCompProps {
 
 interface getEncryptedMnemonicReqData {
   password: string;
+  mnemonic: string[];
+}
+
+interface secureUser {
+  accountId: number;
+  encryptedMnemonic: string;
+}
+
+interface generatemnemonic_ResponseData {
+  mnemonic: string[];
+}
+
+interface generateAccount_RequestData {
   mnemonic: string[];
 }

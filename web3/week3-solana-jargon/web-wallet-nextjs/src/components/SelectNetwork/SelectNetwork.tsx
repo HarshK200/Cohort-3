@@ -3,13 +3,19 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { SolanaLogo } from "@public/index";
 import { EtheriumLogo } from "@public/index";
 import styles from "./selectNetwork.module.css";
+import { supportedBlockchains } from "@/enums";
 
-const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, setCurrentComponent }) => {
-  const supportedBlockhains = [
-    { name: "Solana", logo: <SolanaLogo className={styles.solanaLogo} /> },
-    { name: "Etherium", logo: <EtheriumLogo className={styles.etheriumLogo} /> },
-  ];
+const supportedBlockhains = [
+  { name: "Solana", id: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
+  { name: "Etherium", id: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
+];
 
+const SelectBlockchain: React.FC<SelectBlockchainProps> = ({
+  currentComponent,
+  setCurrentComponent,
+  selectedBlockhain,
+  setSelectedBlockchain,
+}) => {
   return (
     <main className={`${styles.main}`}>
       <FontAwesomeIcon
@@ -31,6 +37,8 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({ currentComponent, s
               blockchain={blockchain}
               currentComponent={currentComponent}
               setCurrentComponent={setCurrentComponent}
+              selectedBlockhain={selectedBlockhain}
+              setSelectedBlockchain={setSelectedBlockchain}
             />
           );
         })}
@@ -43,14 +51,15 @@ export default SelectBlockchain;
 
 const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
   blockchain,
-  currentComponent,
   setCurrentComponent,
+  setSelectedBlockchain,
 }) => {
   return (
     <div
       className={`${styles.blockchainBlock} glass`}
       onClick={() => {
         setCurrentComponent(2);
+        setSelectedBlockchain(blockchain.name);
       }}
     >
       {blockchain.logo}

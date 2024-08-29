@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const Home = () => {
   const router = useRouter();
   React.useEffect(() => {
-    const secureUsers = localStorage.getItem("secureusers");
+    const secureUsers = localStorage.getItem("secureUsers");
     if (!secureUsers) {
       router.push("/onboarding");
     }

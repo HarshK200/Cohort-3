@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import styles from "../page.module.css";
-import crypto from "node:crypto";
+import styles from "./page.module.css";
 import EnterPassword from "@/components/EnterPassword/EnterPassword";
 
 const Wallet = () => {
@@ -16,7 +15,7 @@ const Wallet = () => {
 
   if (!unlocked) {
     return (
-      <main>
+      <main className={styles.main}>
         <EnterPassword />
       </main>
     );

@@ -4,9 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Mnemonic.module.css";
-import axios from "axios";
 
-const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent, mnemonic }) => {
+const Mnemonics: React.FC<MnemonicsComponentProps> = ({
+  currentComponent,
+  setCurrentComponent,
+  mnemonic,
+}) => {
   const [wordsHidden, setWordsHidden] = React.useState<boolean>(true);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
   const [isChecked, setIsChecked] = React.useState<boolean>(false);
@@ -66,7 +69,6 @@ const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCur
       <button
         className={`btn ${styles.nextbtn} glass ${isChecked ? "" : "disabled"}`}
         onClick={() => {
-          localStorage.setItem("mnemonic", JSON.stringify(mnemonic));
           setCurrentComponent(3);
         }}
       >
