@@ -20,7 +20,7 @@ const Onboarding = () => {
     <OnboardingOptions currentComponent={currentComponent} setCurrentComponent={setCurrentComponent} />,
     <SelectBlockchain currentComponent={currentComponent} setCurrentComponent={setCurrentComponent} />,
     <Mnemonics currentComponent={currentComponent} setCurrentComponent={setCurrentComponent} mnemonic={mnemonic} />,
-    <CreatePassword mnemonic={mnemonic}/>,
+    <CreatePassword mnemonic={mnemonic} />,
   ];
 
   return <div className={`${styles.onboardingContainer}`}>{components[currentComponent]}</div>;

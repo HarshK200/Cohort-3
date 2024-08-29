@@ -2,30 +2,31 @@
 import React, { useState } from "react";
 import styles from "../page.module.css";
 import crypto from "node:crypto";
+import EnterPassword from "@/components/EnterPassword/EnterPassword";
 
 const Wallet = () => {
   const [unlocked, setUnlocked] = useState<boolean>(false);
+
   React.useEffect(() => {
-    const unlocked = localStorage.getItem("isUnlocked");
-    if (unlocked) {
+    const walletUnlocked = localStorage.getItem("isUnlocked");
+    if (walletUnlocked) {
       setUnlocked(true);
     }
   }, []);
 
   if (!unlocked) {
-    return <div style={{ color: "white" }}>Enter your password</div>;
+    return (
+      <main>
+        <EnterPassword />
+      </main>
+    );
   }
 
   return <div style={{ color: "white" }}>Wallet</div>;
 };
 
-
 const EnterPass = () => {
-  return <main className={styles.enterPassContainer}>
-    </main>
-}
-
-
-
+  return <main className={styles.enterPassContainer}></main>;
+};
 
 export default Wallet;

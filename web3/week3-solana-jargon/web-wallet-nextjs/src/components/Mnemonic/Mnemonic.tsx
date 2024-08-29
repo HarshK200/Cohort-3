@@ -64,7 +64,7 @@ const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCur
         <label htmlFor="confirmCheckbox">I have saved my seed phrase</label>
       </div>
       <button
-        className={`btn ${styles.nextbtn} glass ${isChecked ? "" : styles.disabled}`}
+        className={`btn ${styles.nextbtn} glass ${isChecked ? "" : "disabled"}`}
         onClick={() => {
           localStorage.setItem("mnemonic", JSON.stringify(mnemonic));
           setCurrentComponent(3);

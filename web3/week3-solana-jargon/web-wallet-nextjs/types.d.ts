@@ -24,3 +24,8 @@ interface MnemonicComponentProps {
 interface CreatePassCompProps {
   mnemonic: string[] | undefined;
 }
+
+interface getEncryptedMnemonicReqData {
+  password: string;
+  mnemonic: string[];
+}
