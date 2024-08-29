@@ -37,17 +37,22 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         blockchain_type: selectedBlockhain,
       };
       const response = await axios.post("/api/generateAccount", reqData);
-      // const generateUser = response.
-      const secureusers: secureUser[] = [];
-      secureusers.push();
-      // localStorage.setItem("secureUsers", JSON.stringify(secureusers));
+      const newSecureUser = response.data as secureUser;
+      const secureusers: secureUser[] = [newSecureUser];
+      localStorage.setItem("secureUsers", JSON.stringify(secureusers));
     } else {
-      // const secureusers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers") || "[]") as secureUser[];
-      // secureusers.push({
-      //   accountId: secureusers.length,
-      //   encryptedMnemonic: encryptedMnemonic,
-      // });
-      // localStorage.setItem("secureUsers", JSON.stringify(secureusers));
+      const secureUsers = JSON.parse(localStorage.getItem("secureUsers")!) as secureUser[];
+      const nextAvilId: number = secureUsers.length;
+      const reqData: generateAccount_RequestData = {
+        nextAvilAccountId: nextAvilId,
+        password: password,
+        mnemonic: mnemonic!,
+        blockchain_type: selectedBlockhain,
+      };
+      const response = await axios.post("/api/generateAccount", reqData);
+      const newSecureUser = response.data as secureUser;
+      secureUsers.push(newSecureUser);
+      localStorage.setItem("secureUsers", JSON.stringify(secureUsers));
     }
 
     setFormSubmitted(false);

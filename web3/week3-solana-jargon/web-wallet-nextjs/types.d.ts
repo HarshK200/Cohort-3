@@ -39,7 +39,7 @@ interface wallet {
   encrypted_private_key: string;
 }
 
-interface secureUser {
+interface secureUser { // also called an account
   accountId: number;
   encryptedMnemonic: string;
   wallets: wallet[];
