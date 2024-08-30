@@ -70,3 +70,9 @@ interface getaccountinfo_RequestData {
   method: string;
   params: string[];
 }
+
+interface AccountComponentProps {
+  user: secureUser;
+  activeSession: recentActiveSessionInfo;
+  setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
+}

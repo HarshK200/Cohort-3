@@ -2,10 +2,9 @@
 import React, { useState } from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { supported_RPCs, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
-import { motion } from "framer-motion";
+import axios from "axios";
 
 const Wallet = () => {
   const router = useRouter();
@@ -13,13 +12,17 @@ const Wallet = () => {
   const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
-  const unlocked = sessionStorage.getItem("unlocked");
-  if (!unlocked) {
-    router.push("/");
-    return;
-  }
+  const [unlocked, setUnlocked] = React.useState<object>();
 
   React.useEffect(() => {
+    const unlocked = sessionStorage.getItem("unlocked");
+    if (!unlocked) {
+      router.push("/");
+      return;
+    } else {
+      setUnlocked(JSON.parse(unlocked));
+    }
+
     const activeAccount = localStorage.getItem("recentActiveSession");
     if (activeAccount) {
       setActiveSession(JSON.parse(activeAccount) as recentActiveSessionInfo);
@@ -40,7 +43,6 @@ const Wallet = () => {
         method: supportedSolanaRpcMethods.getBalance,
         params: [activeSession?.active_wallet.public_key],
       };
-      console.log(reqData);
       try {
         // let response;
         // axios.post(RPC_URL, reqData).then((res) => {
@@ -54,17 +56,19 @@ const Wallet = () => {
     }
   }, [activeSession]);
 
-  return (
-    <main className={styles.main}>
-      <Sidebar />
-      <section className={styles.section}>
-        <header className={styles.heading}>
-          <h1>WALLTY</h1>
-        </header>
-        <h1 className={styles.balance}>{0} Sol</h1>
-      </section>
-    </main>
-  );
+  if (unlocked) {
+    return (
+      <main className={styles.main}>
+        <Sidebar />
+        <section className={styles.section}>
+          <header className={styles.heading}>
+            <h1>VAULT</h1>
+          </header>
+          <h1 className={styles.balance}>{0} Sol</h1>
+        </section>
+      </main>
+    );
+  }
 };
 
 export default Wallet;

@@ -43,8 +43,22 @@ const EnterPassword = () => {
     }
   };
 
+  const enterPasswordFormVariants = {
+    initial: { opacity: 0, x: 200 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -200 },
+  };
+
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <motion.form
+      className={styles.form}
+      onSubmit={handleSubmit}
+      key="form" // Key ensures that each component change triggers animation
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      variants={enterPasswordFormVariants}
+    >
       <h1>Enter password</h1>
       <input
         type="password"
@@ -65,7 +79,7 @@ const EnterPassword = () => {
         <PuffLoader loading={formSubmitted} color="white" size={30} />
         <span>Submit</span>
       </motion.button>
-    </form>
+    </motion.form>
   );
 };
 

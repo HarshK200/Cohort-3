@@ -79,7 +79,6 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
   const hashed_pass = localStorage.getItem("hashed_pass");
   if (hashed_pass) {
     const handlePassSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
       setFormSubmitted(true);
       const correct = await bcrypt.compare(password, hashed_pass);
       if (correct) {

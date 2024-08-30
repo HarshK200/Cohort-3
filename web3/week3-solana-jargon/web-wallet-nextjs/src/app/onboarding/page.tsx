@@ -40,7 +40,7 @@ const Onboarding = () => {
   };
 
   return (
-    <div style={{ overflow: "hidden", height: "100%" }}>
+    <div style={{ overflow: "hidden", height: "100%"}}>
       <AnimatePresence mode="wait">
         <motion.div
           key={currentComponent} // Key ensures that each component change triggers animation

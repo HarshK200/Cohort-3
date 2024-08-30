@@ -10,7 +10,7 @@ const lexend = Ubuntu({
 });
 
 export const metadata: Metadata = {
-  title: "Wallt",
+  title: "Vault",
   description: "A simple web-based crypto wallet",
 };
 

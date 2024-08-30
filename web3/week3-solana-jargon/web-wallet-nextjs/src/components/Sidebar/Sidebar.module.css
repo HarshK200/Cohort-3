@@ -2,21 +2,58 @@
   background-color: var(--call-to-action);
   place-self: center;
   height: 96%;
-  width: 4rem;
+  width: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   right: 1rem;
-  /* padding: 0.7rem; */
   border-radius: 0.5rem;
+  z-index: 100;
 }
 
-.leftButton {
+.openCloseBtnDiv {
   position: absolute;
+  display: grid;
+  place-items: center;
   background-color: var(--call-to-action);
-  color: black;
-  right: -1rem;
-  padding: 2rem;
-  border-radius: 10rem;
+  width: 5rem;
+  height: 5rem;
+  right: 1.5rem;
+  border-radius: 12rem;
+  z-index: -1;
+}
+
+.openCloseBtn {
+  position: relative;
+  font-size: 1.2rem;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 5px;
+  right: 1.7rem;
+  cursor: pointer;
+}
+
+.userContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  gap: 2rem;
+  padding-top: 2rem;
+  overflow-y: scroll;
+}
+
+.user {
+  color: white;
+  background-color: red;
+  font-weight: bold;
+  background-color: black;
+  color: white;
+  padding: 1rem;
+  border-radius: 20rem;
+  cursor: pointer;
 }
