@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supported_RPCs, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
+import { easeIn, motion } from "framer-motion";
 
 const Wallet = () => {
   const router = useRouter();
@@ -66,7 +67,7 @@ const Wallet = () => {
     }
   }, [activeSession]);
 
-  if (unlocked) {
+  if (unlocked && selectedAccount) {
     return (
       <main className={styles.main}>
         <Sidebar setActiveSession={setActiveSession} activeSession={activeSession} />
@@ -75,6 +76,24 @@ const Wallet = () => {
             <h1>VAULT</h1>
           </header>
           <h1 className={styles.balance}>{0} Sol</h1>
+          <div className={styles.walletsContainer}>
+            {selectedAccount.wallets.map((wallet, index) => {
+              return (
+                <motion.div
+                  key={activeSession?.active_accountId!}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                    transition={{ease: easeIn}}
+                  className={styles.wallet}
+                >
+                  <span>
+                    <strong>Public key: </strong>
+                    {wallet.public_key}
+                  </span>
+                </motion.div>
+              );
+            })}
+          </div>
         </section>
       </main>
     );
