@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Mnemonic.module.css";
+import { motion } from "framer-motion";
 
 const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent, mnemonic }) => {
   const [wordsHidden, setWordsHidden] = React.useState<boolean>(true);
@@ -62,14 +63,16 @@ const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCur
         />
         <label htmlFor="confirmCheckbox">I have saved my seed phrase</label>
       </div>
-      <button
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 1.01 }}
         className={`btn ${styles.nextbtn} glass ${isChecked ? "" : "disabled"}`}
         onClick={() => {
           setCurrentComponent(3);
         }}
       >
         Next
-      </button>
+      </motion.button>
     </main>
   );
 };

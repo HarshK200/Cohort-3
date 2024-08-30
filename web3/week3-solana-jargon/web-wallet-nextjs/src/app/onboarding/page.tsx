@@ -7,6 +7,7 @@ import Mnemonics from "@components/Mnemonic/Mnemonic";
 import CreatePassword from "@/components/CreatePassword/CreatePassword";
 import axios from "axios";
 import { supportedBlockchains } from "@/enums";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Onboarding = () => {
   const [currentComponent, setCurrentComponent] = React.useState<number>(0);
@@ -32,7 +33,28 @@ const Onboarding = () => {
     <CreatePassword mnemonic={mnemonic} selectedBlockhain={selectedBlockhain} />,
   ];
 
-  return <div className={`${styles.onboardingContainer}`}>{components[currentComponent]}</div>;
+  const variants = {
+    initial: { opacity: 0, x: 200 },
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -200 },
+  };
+
+  return (
+    <div style={{ overflow: "hidden", height: "100%" }}>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentComponent} // Key ensures that each component change triggers animation
+          initial="initial"
+          animate="animate"
+          exit="exit"
+          variants={variants}
+          className={`${styles.onboardingContainer}`}
+        >
+          {components[currentComponent]}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
 };
 
 export default Onboarding;

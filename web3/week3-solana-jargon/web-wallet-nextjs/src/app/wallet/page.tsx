@@ -11,13 +11,13 @@ const Wallet = () => {
   const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
+  const unlocked = sessionStorage.getItem("unlocked");
+  if (!unlocked) {
+    router.push("/");
+    return;
+  }
 
   React.useEffect(() => {
-    const unlocked = sessionStorage.getItem("unlocked");
-    if (!unlocked) {
-      router.push("/");
-      return;
-    }
     const activeAccount = localStorage.getItem("recentActiveSession");
     if (activeAccount) {
       setActiveSession(JSON.parse(activeAccount) as recentActiveSessionInfo);
@@ -58,7 +58,7 @@ const Wallet = () => {
         <h1>WALLTY</h1>
       </header>
       <section className={styles.balance}>
-        <h1>$ {balance}</h1>
+        <h1>{balance} Sol</h1>
       </section>
     </main>
   );

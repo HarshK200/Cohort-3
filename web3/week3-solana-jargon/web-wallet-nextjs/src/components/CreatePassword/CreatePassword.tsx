@@ -6,6 +6,9 @@ import React from "react";
 import { PuffLoader } from "react-spinners";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import * as bcrypt from "bcryptjs";
+import { toast } from "react-toastify";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
@@ -73,9 +76,34 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     router.push("/wallet");
   };
 
-  if (localStorage.getItem("hashed_pass")) {
+  const hashed_pass = localStorage.getItem("hashed_pass");
+  if (hashed_pass) {
+    const handlePassSubmit = async (e: FormEvent<HTMLFormElement>) => {
+      setFormSubmitted(true);
+      const correct = await bcrypt.compare(password, hashed_pass);
+      if (correct) {
+        sessionStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
+        await handleSubmit(e);
+        return;
+      } else {
+        toast.error("Incorrect password!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setTimeout(() => {
+          setFormSubmitted(false);
+        }, 200);
+      }
+    };
+
     return (
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <form className={styles.form} onSubmit={handlePassSubmit}>
         <h1>Enter password</h1>
         <input
           type="password"
@@ -87,10 +115,15 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           }}
           required={true}
         />
-        <button type="submit" className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 1.01 }}
+          type="submit"
+          className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}
+        >
           <PuffLoader loading={formSubmitted} color="white" size={30} />
           <span>Submit</span>
-        </button>
+        </motion.button>
       </form>
     );
   }

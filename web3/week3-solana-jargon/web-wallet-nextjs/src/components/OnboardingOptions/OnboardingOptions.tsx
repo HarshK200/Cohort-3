@@ -1,17 +1,26 @@
 import styles from "./OnboardingOptions.module.css";
+import { motion } from "framer-motion";
 
 const OnboardingOptions: React.FC<OnboardingOptsComponentProps> = ({ currentComponent, setCurrentComponent }) => {
   return (
     <main className={`${styles.btnContainer}`}>
-      <button
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 1.01 }}
         className={`btn ${styles.createButton}`}
         onClick={() => {
           setCurrentComponent(1);
         }}
       >
         Create wallet
-      </button>
-      <button className={`btn glass ${styles.importButton}`}>Import wallet</button>
+      </motion.button>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 1.01 }}
+        className={`btn glass ${styles.importButton}`}
+      >
+        Import wallet
+      </motion.button>
     </main>
   );
 };

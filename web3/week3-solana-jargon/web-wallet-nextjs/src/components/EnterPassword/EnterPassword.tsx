@@ -6,6 +6,7 @@ import { FormEvent } from "react";
 import * as bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const EnterPassword = () => {
   const [password, setPassword] = React.useState<string>("");
@@ -55,10 +56,15 @@ const EnterPassword = () => {
         }}
         required={true}
       />
-      <button type="submit" className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 1.01 }}
+        type="submit"
+        className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}
+      >
         <PuffLoader loading={formSubmitted} color="white" size={30} />
         <span>Submit</span>
-      </button>
+      </motion.button>
     </form>
   );
 };

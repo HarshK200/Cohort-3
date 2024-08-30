@@ -4,6 +4,7 @@ import { SolanaLogo } from "@public/index";
 import { EtheriumLogo } from "@public/index";
 import styles from "./selectNetwork.module.css";
 import { supportedBlockchains } from "@/enums";
+import { motion } from "framer-motion";
 
 const supportedBlockhains = [
   { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
@@ -55,7 +56,9 @@ const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
   setSelectedBlockchain,
 }) => {
   return (
-    <div
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 1.01 }}
       className={`${styles.blockchainBlock} glass`}
       onClick={() => {
         setCurrentComponent(2);
@@ -64,6 +67,6 @@ const BlockchainContainer: React.FC<BlockchainContainerProps> = ({
     >
       {blockchain.logo}
       <h2>{blockchain.name}</h2>
-    </div>
+    </motion.div>
   );
 };
