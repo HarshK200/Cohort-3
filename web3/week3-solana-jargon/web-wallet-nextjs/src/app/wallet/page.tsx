@@ -59,7 +59,7 @@ const Wallet = () => {
   if (unlocked) {
     return (
       <main className={styles.main}>
-        <Sidebar />
+        <Sidebar setActiveSession={setActiveSession} activeSession={activeSession} />
         <section className={styles.section}>
           <header className={styles.heading}>
             <h1>VAULT</h1>

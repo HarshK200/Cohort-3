@@ -5,9 +5,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
 
-const Sidebar = () => {
+const Sidebar: React.FC<{
+  setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
+  activeSession: recentActiveSessionInfo | undefined;
+}> = ({ setActiveSession, activeSession }) => {
   const [secureUsers, setSecureUsers] = useState<secureUser[]>();
-  const [activeSession, setActiveSession] = useState<recentActiveSessionInfo>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   React.useEffect(() => {
@@ -20,6 +22,12 @@ const Sidebar = () => {
       setActiveSession(JSON.parse(activeSessionLocal!));
     }
   }, []);
+
+  React.useEffect(() => {
+    if (activeSession) {
+      localStorage.setItem("recentActiveSession", JSON.stringify(activeSession));
+    }
+  }, [activeSession]);
 
   const sidebarVariant = {
     hidden: {
