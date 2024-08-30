@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { supported_RPCs, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import { motion } from "framer-motion";
 
 const Wallet = () => {
   const router = useRouter();

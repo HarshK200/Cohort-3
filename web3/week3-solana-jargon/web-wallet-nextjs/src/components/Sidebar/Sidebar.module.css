@@ -1,9 +1,22 @@
-.sidebar {
-  height: 100%;
+.sidebarContainer {
+  background-color: var(--call-to-action);
+  place-self: center;
+  height: 96%;
+  width: 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: white;
-  position: absolute;
+  position: fixed;
   right: 1rem;
+  /* padding: 0.7rem; */
+  border-radius: 0.5rem;
+}
+
+.leftButton {
+  position: absolute;
+  background-color: var(--call-to-action);
+  color: black;
+  right: -1rem;
+  padding: 2rem;
+  border-radius: 10rem;
 }
