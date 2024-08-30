@@ -83,12 +83,15 @@ const Wallet = () => {
                   key={activeSession?.active_accountId!}
                   initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
-                    transition={{ease: easeIn}}
-                  className={styles.wallet}
+                  transition={{ ease: easeIn }}
+                  className={`glass ${styles.wallet}`}
                 >
                   <span>
                     <strong>Public key: </strong>
                     {wallet.public_key}
+                  </span>
+                  <span>
+                    <strong>Private Key: {"priavtekeydsklfjojfioehoiuhfuieohfuiefihfuiehfuiehfuh"}</strong>
                   </span>
                 </motion.div>
               );

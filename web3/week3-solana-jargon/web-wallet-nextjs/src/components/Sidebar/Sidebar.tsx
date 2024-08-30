@@ -33,7 +33,7 @@ const Sidebar: React.FC<{
 
   const sidebarVariant = {
     hidden: {
-      x: 90,
+      x: 95,
     },
     hover: {
       x: isOpen ? 0 : 87,

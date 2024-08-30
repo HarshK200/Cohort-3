@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 const supportedBlockhains = [
   { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
-  { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
+  // { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
 ];
 
 const SelectBlockchain: React.FC<SelectBlockchainProps> = ({
@@ -29,7 +29,7 @@ const SelectBlockchain: React.FC<SelectBlockchainProps> = ({
         }}
       />
       <h1>Select Blockchain</h1>
-      <p>We support mulitple blockchains, you can add more later.</p>
+      {/*<p>We support mulitple blockchains, you can add more later.</p>*/}
       <div className={styles.blockchainContainer}>
         {supportedBlockhains.map((blockchain: BlockchainContainerProps["blockchain"], index: number) => {
           return (
