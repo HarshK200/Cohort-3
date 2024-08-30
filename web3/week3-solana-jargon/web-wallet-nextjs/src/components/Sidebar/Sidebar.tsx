@@ -1,9 +1,10 @@
 "use client";
 import styles from "./Sidebar.module.css";
-import { animate, motion, TapInfo } from "framer-motion";
+import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faChevronRight, faPlus } from "@fortawesome/free-solid-svg-icons";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Sidebar: React.FC<{
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
@@ -11,6 +12,7 @@ const Sidebar: React.FC<{
 }> = ({ setActiveSession, activeSession }) => {
   const [secureUsers, setSecureUsers] = useState<secureUser[]>();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   React.useEffect(() => {
     const secureUsersLocal = localStorage.getItem("secureUsers");
@@ -40,7 +42,6 @@ const Sidebar: React.FC<{
       x: 0,
     },
   };
-  function sidebarOnTap(event: MouseEvent, info: TapInfo) {}
 
   if (secureUsers && activeSession) {
     return (
@@ -49,7 +50,6 @@ const Sidebar: React.FC<{
         initial="hidden"
         whileHover="hover"
         animate={isOpen ? "open" : ""}
-        onTap={sidebarOnTap}
         className={styles.sidebarContainer}
       >
         <motion.div className={styles.openCloseBtnDiv}>
@@ -75,6 +75,9 @@ const Sidebar: React.FC<{
           {secureUsers.map((currUser: secureUser) => {
             return <Account user={currUser} activeSession={activeSession} setActiveSession={setActiveSession} />;
           })}
+          <motion.div whileHover={{ scale: 1.2 }} className={styles.addAccountPlus} onClick={() => {router.push("/onboarding")}}>
+            <FontAwesomeIcon icon={faPlus} />
+          </motion.div>
         </div>
       </motion.nav>
     );
@@ -92,11 +95,12 @@ const Account: React.FC<AccountComponentProps> = ({ user, activeSession, setActi
   };
 
   return (
-    <div
+    <motion.div
+      whileHover={{ scale: 1.15 }}
       className={`${styles.user} ${activeSession.active_accountId === user.accountId ? styles.activeUser : ""}`}
       onClick={handleClick}
     >
       A {user.accountId + 1}
-    </div>
+    </motion.div>
   );
 };

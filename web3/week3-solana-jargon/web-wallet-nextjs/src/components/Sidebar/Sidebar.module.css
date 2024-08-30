@@ -60,7 +60,19 @@
   font-weight: bold;
   color: var(--call-to-action);
   background-color: white;
-  padding: 1rem;
+  padding: 0.8rem;
+  border-radius: 20rem;
+  cursor: pointer;
+  border: 0.4rem solid black;
+}
+
+.addAccountPlus {
+  display: grid;
+  place-items: center;
+  background-color: black;
+  color: white;
+  height: 3.5rem;
+  width: 3.5rem;
   border-radius: 20rem;
   cursor: pointer;
 }
