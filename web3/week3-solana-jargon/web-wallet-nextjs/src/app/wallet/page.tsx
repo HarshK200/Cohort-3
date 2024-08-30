@@ -4,6 +4,7 @@ import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { supported_RPCs, supportedSolanaRpcMethods } from "@/enums";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 const Wallet = () => {
   const router = useRouter();
@@ -40,12 +41,12 @@ const Wallet = () => {
       };
       console.log(reqData);
       try {
-        let response;
-        axios.post(RPC_URL, reqData).then((res) => {
-          response = res.data;
-          console.log(response);
-          setBalance(response.result.value / 1000000000); // converting lamports to sol
-        });
+        // let response;
+        // axios.post(RPC_URL, reqData).then((res) => {
+        //   response = res.data;
+        //   console.log(response);
+        //   setBalance(response.result.value / 1000000000); // converting lamports to sol
+        // });
       } catch (e) {
         console.log("Err making rpc call", e);
       }
@@ -54,11 +55,12 @@ const Wallet = () => {
 
   return (
     <main className={styles.main}>
-      <header className={styles.heading}>
-        <h1>WALLTY</h1>
-      </header>
-      <section className={styles.balance}>
-        <h1>{balance} Sol</h1>
+      <Sidebar />
+      <section className={styles.section}>
+        <header className={styles.heading}>
+          <h1>WALLTY</h1>
+        </header>
+        <h1 className={styles.balance}>{0} Sol</h1>
       </section>
     </main>
   );

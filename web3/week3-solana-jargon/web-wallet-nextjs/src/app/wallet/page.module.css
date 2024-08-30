@@ -1,5 +1,11 @@
 .main {
   height: 100%;
+  display: flex;
+}
+
+.section {
+  height: 100%;
+  width: 100%;
   color: white;
   display: flex;
   flex-direction: column;
@@ -8,9 +14,10 @@
 
 .heading {
   padding: 4rem 0;
-  font-size: 2rem;
+  font-size: 3rem;
+  color: var(--call-to-action);
 }
 
 .balance {
-  font-size: 1.2rem;
+  font-size: 2rem;
 }
