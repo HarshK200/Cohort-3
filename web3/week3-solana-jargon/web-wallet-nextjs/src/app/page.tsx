@@ -8,18 +8,22 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Home = () => {
   const router = useRouter();
-  const secureUsers = localStorage.getItem("secureUsers");
-  // if user doesn't has an account
-  if (!secureUsers) {
-    router.push("/onboarding");
-    return;
-  }
+  const [unlocked, setUnlocked] = React.useState<object>();
 
-  const unlocked = sessionStorage.getItem("unlocked");
-  if (unlocked) {
-    router.push("/wallet");
-    return;
-  }
+  React.useEffect(() => {
+    const secureUsers = localStorage.getItem("secureUsers");
+    // if user doesn't has an account
+    if (!secureUsers) {
+      router.push("/onboarding");
+      return;
+    }
+    const unlocked = sessionStorage.getItem("unlocked");
+    if (unlocked) {
+      setUnlocked(JSON.parse(unlocked));
+      router.push("/wallet");
+      return;
+    }
+  }, []);
 
   return (
     <main className={`container ${styles.main}`}>

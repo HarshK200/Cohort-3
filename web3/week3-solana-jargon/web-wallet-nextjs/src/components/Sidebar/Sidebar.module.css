@@ -48,11 +48,18 @@
 }
 
 .user {
-  color: white;
-  background-color: red;
   font-weight: bold;
   background-color: black;
   color: white;
+  padding: 1rem;
+  border-radius: 20rem;
+  cursor: pointer;
+}
+
+.activeUser {
+  font-weight: bold;
+  color: var(--call-to-action);
+  background-color: white;
   padding: 1rem;
   border-radius: 20rem;
   cursor: pointer;

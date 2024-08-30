@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import * as bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
+import { handleClientScriptLoad } from "next/script";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
@@ -49,8 +50,9 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         active_wallet: newSecureUser.wallets[0],
       };
       localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
+      router.push("/")
     }
-    // when user already has account and creating a new on
+    // when user already has account and creating a new one
     else {
       const secureUsers = JSON.parse(localStorage.getItem("secureUsers")!) as secureUser[];
       const nextAvilId: number = secureUsers.length;
@@ -62,7 +64,6 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       };
       const response = await axios.post("/api/generateAccount", reqData);
       const newSecureUser = response.data.secureuser as secureUser;
-      console.log(newSecureUser);
       secureUsers.push(newSecureUser);
       localStorage.setItem("secureUsers", JSON.stringify(secureUsers));
       const recentActiveSession: recentActiveSessionInfo = {

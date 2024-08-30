@@ -12,6 +12,7 @@ const Wallet = () => {
   const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
+  const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
   const [unlocked, setUnlocked] = React.useState<object>();
 
   React.useEffect(() => {
@@ -34,6 +35,15 @@ const Wallet = () => {
       });
     }
   }, []);
+
+  React.useEffect(() => {
+    const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
+    if (secureUsers) {
+      secureUsers.forEach((user) => {
+        activeSession?.active_accountId === user.accountId ? setSelectedAccount(user) : null;
+      });
+    }
+  }, [activeSession]);
 
   React.useEffect(() => {
     if (activeSession) {

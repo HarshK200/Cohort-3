@@ -92,7 +92,10 @@ const Account: React.FC<AccountComponentProps> = ({ user, activeSession, setActi
   };
 
   return (
-    <div className={styles.user} onClick={handleClick}>
+    <div
+      className={`${styles.user} ${activeSession.active_accountId === user.accountId ? styles.activeUser : ""}`}
+      onClick={handleClick}
+    >
       A {user.accountId + 1}
     </div>
   );
