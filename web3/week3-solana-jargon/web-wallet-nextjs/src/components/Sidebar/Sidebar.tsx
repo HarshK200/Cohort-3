@@ -73,9 +73,22 @@ const Sidebar: React.FC<{
         </motion.div>
         <div className={styles.userContainer}>
           {secureUsers.map((currUser: secureUser) => {
-            return <Account user={currUser} activeSession={activeSession} setActiveSession={setActiveSession} />;
+            return (
+              <Account
+                key={currUser.accountId}
+                user={currUser}
+                activeSession={activeSession}
+                setActiveSession={setActiveSession}
+              />
+            );
           })}
-          <motion.div whileHover={{ scale: 1.2 }} className={styles.addAccountPlus} onClick={() => {router.push("/onboarding")}}>
+          <motion.div
+            whileHover={{ scale: 1.2 }}
+            className={styles.addAccountPlus}
+            onClick={() => {
+              router.push("/onboarding");
+            }}
+          >
             <FontAwesomeIcon icon={faPlus} />
           </motion.div>
         </div>
