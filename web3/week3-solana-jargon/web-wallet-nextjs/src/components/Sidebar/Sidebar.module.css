@@ -3,4 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
+  position: absolute;
+  right: 1rem;
 }
