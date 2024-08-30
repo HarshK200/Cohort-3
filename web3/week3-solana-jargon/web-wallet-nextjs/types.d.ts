@@ -34,15 +34,21 @@ interface getEncryptedMnemonicReqData {
 }
 
 interface wallet {
-  blockchain_type: string; // would be somthing like [Solana, Etherium]
+  blockchain_type: supportedBlockchains; // would be somthing like [Solana, Etherium]
   public_key: string;
   encrypted_private_key: string;
 }
 
-interface secureUser { // also called an account
+interface secureUser {
+  // also called an account
   accountId: number;
   encryptedMnemonic: string;
   wallets: wallet[];
+}
+
+interface recentActiveSessionInfo {
+  active_accountId: number;
+  active_wallet: wallet;
 }
 
 interface generatemnemonic_ResponseData {
@@ -57,3 +63,10 @@ interface generateAccount_RequestData {
 }
 
 interface generateAccount_ResponseData extends secureUser {}
+
+interface getaccountinfo_RequestData {
+  jsonrpcVersion: string;
+  id: number;
+  method: string;
+  params: string[];
+}

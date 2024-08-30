@@ -40,6 +40,12 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       const secureusers: secureUser[] = [newSecureUser];
       localStorage.setItem("secureUsers", JSON.stringify(secureusers));
       localStorage.setItem("hashed_pass", hashed_pass);
+      // making the current account and wallet to be active
+      const recentActiveSession: recentActiveSessionInfo = {
+        active_accountId: 0,
+        active_wallet: newSecureUser.wallets[0],
+      };
+      localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
     }
     // when user already has account and creating a new on
     else {
@@ -52,9 +58,15 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         blockchain_type: selectedBlockhain,
       };
       const response = await axios.post("/api/generateAccount", reqData);
-      const newSecureUser = response.data as secureUser;
+      const newSecureUser = response.data.secureuser as secureUser;
+      console.log(newSecureUser);
       secureUsers.push(newSecureUser);
       localStorage.setItem("secureUsers", JSON.stringify(secureUsers));
+      const recentActiveSession: recentActiveSessionInfo = {
+        active_accountId: nextAvilId,
+        active_wallet: newSecureUser.wallets[0],
+      };
+      localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
     }
 
     setFormSubmitted(false);

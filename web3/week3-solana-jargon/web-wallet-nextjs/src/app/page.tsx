@@ -18,9 +18,9 @@ const Home = () => {
       router.push("/onboarding");
     }
 
-    const unlocked = localStorage.getItem("unlocked");
+    const unlocked = sessionStorage.getItem("unlocked");
     if (unlocked) {
-      router.push("wallet");
+      router.push("/wallet");
     }
   }, []);
 

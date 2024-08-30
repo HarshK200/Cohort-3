@@ -19,5 +19,5 @@ function getKeysFrommneomic(mnemonic: string) {
   }
 }
 
-const mnemonic: string = "your mnemonic";
+const mnemonic: string = "protect surround have remove ghost bamboo seminar clap asset use merge earn";
 getKeysFrommneomic(mnemonic);

@@ -19,7 +19,8 @@ const EnterPassword = () => {
     if (hashed_pass) {
       bcrypt.compare(password, hashed_pass).then((correct) => {
         if (correct) {
-          localStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
+          sessionStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
+          router.push("/wallet");
         } else {
           toast.error("Incorrect password!", {
             position: "bottom-right",
@@ -31,7 +32,9 @@ const EnterPassword = () => {
             progress: undefined,
             theme: "dark",
           });
-          setFormSubmitted(false);
+          setTimeout(() => {
+            setFormSubmitted(false);
+          }, 200);
         }
       });
     } else {

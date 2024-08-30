@@ -2,7 +2,7 @@ import Cryptr from "cryptr";
 import { NextRequest, NextResponse } from "next/server";
 import { Keypair, PublicKey } from "@solana/web3.js";
 import nacl from "tweetnacl";
-import { mnemonicToSeed, mnemonicToSeedSync } from "bip39";
+import { mnemonicToSeedSync } from "bip39";
 import { derivePath } from "ed25519-hd-key";
 import { supportedBlockchains } from "@/enums";
 import bs58 from "bs58";
