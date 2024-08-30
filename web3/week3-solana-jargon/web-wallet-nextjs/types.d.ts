@@ -65,7 +65,7 @@ interface generateAccount_RequestData {
 interface generateAccount_ResponseData extends secureUser {}
 
 interface getaccountinfo_RequestData {
-  jsonrpcVersion: string;
+  jsonrpc: string;
   id: number;
   method: string;
   params: string[];

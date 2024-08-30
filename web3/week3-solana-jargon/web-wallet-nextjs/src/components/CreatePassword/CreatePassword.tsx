@@ -73,6 +73,28 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     router.push("/wallet");
   };
 
+  if (localStorage.getItem("hashed_pass")) {
+    return (
+      <form className={styles.form} onSubmit={handleSubmit}>
+        <h1>Enter password</h1>
+        <input
+          type="password"
+          className={styles.passInput}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          required={true}
+        />
+        <button type="submit" className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}>
+          <PuffLoader loading={formSubmitted} color="white" size={30} />
+          <span>Submit</span>
+        </button>
+      </form>
+    );
+  }
+
   return (
     <main className={styles.main}>
       <form className={styles.form} onSubmit={handleSubmit}>

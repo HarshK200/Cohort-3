@@ -7,41 +7,50 @@ import { supported_RPCs, supportedSolanaRpcMethods } from "@/enums";
 
 const Wallet = () => {
   const router = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
   const [balance, setBalance] = React.useState<number>();
+  const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
 
   React.useEffect(() => {
     const unlocked = sessionStorage.getItem("unlocked");
     if (!unlocked) {
       router.push("/");
+      return;
     }
     const activeAccount = localStorage.getItem("recentActiveSession");
-    let activeSessionInfo: recentActiveSessionInfo;
     if (activeAccount) {
-      activeSessionInfo = JSON.parse(activeAccount) as recentActiveSessionInfo;
+      setActiveSession(JSON.parse(activeAccount) as recentActiveSessionInfo);
     } else {
       const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
-      activeSessionInfo = {
+      setActiveSession({
         active_accountId: secureUsers[0].accountId,
         active_wallet: secureUsers[0].wallets[0],
-      };
-    }
-    const reqData: getaccountinfo_RequestData = {
-      jsonrpcVersion: "2.0",
-      id: Math.floor(Math.random() * 10),
-      method: supportedSolanaRpcMethods.getBalance,
-      params: [activeSessionInfo.active_wallet.public_key],
-    };
-    try {
-      let response;
-      axios.post(RPC_URL, reqData).then((res) => {
-        response = res.data;
-        console.log(response);
       });
-    } catch (e) {
-      console.log("Err making rpc call", e);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (activeSession) {
+      const reqData: getaccountinfo_RequestData = {
+        jsonrpc: "2.0",
+        id: 0,
+        method: supportedSolanaRpcMethods.getBalance,
+        params: [activeSession?.active_wallet.public_key],
+      };
+      console.log(reqData);
+      try {
+        let response;
+        axios.post(RPC_URL, reqData).then((res) => {
+          response = res.data;
+          console.log(response);
+          setBalance(response.result.value / 1000000000); // converting lamports to sol
+        });
+      } catch (e) {
+        console.log("Err making rpc call", e);
+      }
+    }
+  }, [activeSession]);
 
   return (
     <main className={styles.main}>

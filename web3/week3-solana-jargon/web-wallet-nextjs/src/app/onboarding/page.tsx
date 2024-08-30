@@ -7,7 +7,6 @@ import Mnemonics from "@components/Mnemonic/Mnemonic";
 import CreatePassword from "@/components/CreatePassword/CreatePassword";
 import axios from "axios";
 import { supportedBlockchains } from "@/enums";
-import { ToastContainer } from "react-toastify";
 
 const Onboarding = () => {
   const [currentComponent, setCurrentComponent] = React.useState<number>(0);

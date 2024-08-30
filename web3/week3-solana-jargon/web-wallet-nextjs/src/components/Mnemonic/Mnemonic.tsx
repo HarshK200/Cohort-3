@@ -5,11 +5,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import styles from "./Mnemonic.module.css";
 
-const Mnemonics: React.FC<MnemonicsComponentProps> = ({
-  currentComponent,
-  setCurrentComponent,
-  mnemonic,
-}) => {
+const Mnemonics: React.FC<MnemonicsComponentProps> = ({ currentComponent, setCurrentComponent, mnemonic }) => {
   const [wordsHidden, setWordsHidden] = React.useState<boolean>(true);
   const [isCopied, setIsCopied] = React.useState<boolean>(false);
   const [isChecked, setIsChecked] = React.useState<boolean>(false);
