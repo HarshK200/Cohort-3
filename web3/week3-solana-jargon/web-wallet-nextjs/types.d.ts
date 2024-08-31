@@ -85,6 +85,5 @@ interface decryptprivatekey_RequestData {
 interface WalletContainerComponenetProps {
   wallet: wallet;
   activeSession: recentActiveSessionInfo;
-  password: string;
-  setIsEnterPassopen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleCopyPrivateKey: () => void;
 }

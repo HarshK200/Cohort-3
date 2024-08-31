@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import * as bcrypt from "bcryptjs";
 import { toast } from "react-toastify";
-import { handleClientScriptLoad } from "next/script";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();

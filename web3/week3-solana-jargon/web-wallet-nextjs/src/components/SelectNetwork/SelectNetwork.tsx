@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { SolanaLogo } from "@public/index";
-import { EtheriumLogo } from "@public/index";
+// import { EtheriumLogo } from "@public/index";
 import styles from "./selectNetwork.module.css";
 import { supportedBlockchains } from "@/enums";
 import { motion } from "framer-motion";

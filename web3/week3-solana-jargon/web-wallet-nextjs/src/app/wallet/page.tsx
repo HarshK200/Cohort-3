@@ -1,22 +1,22 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
-import { supported_RPCs, supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
+import { supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
-import { easeIn, motion } from "framer-motion";
+import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { SolanaLogo } from "@public/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PuffLoader } from "react-spinners";
+import bcrypt from "bcryptjs";
 
 const Wallet = () => {
   const router = useRouter();
-  // const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
-  const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
+  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
@@ -75,11 +75,57 @@ const Wallet = () => {
     }
   }, [activeSession]);
 
-  function handleEnterPassSubmit() {
+  async function handleEnterPassSubmit() {
+    const hashed_pass = localStorage.getItem("hashed_pass");
+    const correct = await bcrypt.compare(password, hashed_pass!);
+    if (correct) {
+      setIsEnterPassopen(false);
+      handleCopyPrivateKey();
+    } else {
+      toast.error("Incorrect password!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
     setTimeout(() => {
       setPassword("");
     }, 60000); // sets the password to "" after 10 minutes
   }
+
+  const handleCopyPrivateKey = () => {
+    if (password !== "") {
+      const reqData: decryptprivatekey_RequestData = {
+        encrypted_private_key: activeSession?.active_wallet.encrypted_private_key!,
+        password: password,
+      };
+
+      const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {
+        toast.promise(response, {
+          pending: {
+            render() {
+              return "Decrypting privatekey";
+            },
+          },
+          success: {
+            render() {
+              navigator.clipboard.writeText(data.decryptedPrivateKey);
+              return "Copyied to clipboard";
+            },
+          },
+          error: "Err: please check your password",
+        });
+      });
+    } else {
+      toast.warn("please enter password!");
+      setIsEnterPassopen(true);
+    }
+  };
 
   if (unlocked && selectedAccount) {
     return (
@@ -97,8 +143,7 @@ const Wallet = () => {
                   key={index}
                   wallet={wallet}
                   activeSession={activeSession!}
-                  password={password}
-                  setIsEnterPassopen={setIsEnterPassopen}
+                  handleCopyPrivateKey={handleCopyPrivateKey}
                 />
               );
             })}
@@ -116,34 +161,37 @@ const Wallet = () => {
           pauseOnHover={false}
           theme="dark"
         />
-        {isEnterpassOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0, x: 0 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0 }}
-            className={`glass ${styles.enterPassDiv}`}
-          >
-            <h1>Enter password</h1>
-            <div className={styles.passInputContainer}>
-              <input
-                className={styles.passInput}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 1.01 }}
-                className={`btn ${styles.submitbtn}`}
-                onClick={handleEnterPassSubmit}
-              >
-                <PuffLoader loading={false} color="white" size={30} />
-                <span>Submit</span>
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
+
+        <AnimatePresence>
+          {isEnterpassOpen && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              className={`glass ${styles.enterPassDiv}`}
+            >
+              <h1>Enter password</h1>
+              <div className={styles.passInputContainer}>
+                <input
+                  className={styles.passInput}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 1.01 }}
+                  className={`btn ${styles.submitbtn}`}
+                  onClick={handleEnterPassSubmit}
+                >
+                  <PuffLoader loading={false} color="white" size={30} />
+                  <span>Submit</span>
+                </motion.button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
     );
   }
@@ -151,11 +199,27 @@ const Wallet = () => {
 
 export default Wallet;
 
-const WalletContainer = ({ wallet, activeSession, password, setIsEnterPassopen }: WalletContainerComponenetProps) => {
+const WalletContainer = ({ wallet, activeSession, handleCopyPrivateKey }: WalletContainerComponenetProps) => {
   const supportedBlockhains = [
     { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
     // { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
   ];
+
+  const handleCopyPublicKey = () => {
+    navigator.clipboard.writeText(wallet.public_key).then(() => {
+      toast.info("Copyied to clipboard!", {
+        position: "bottom-right",
+        autoClose: 1000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    });
+  };
+
   let wallet_blockchain_icon: React.JSX.Element;
   supportedBlockhains.forEach((ele) => {
     if (ele.name === wallet.blockchain_type) {
@@ -174,62 +238,14 @@ const WalletContainer = ({ wallet, activeSession, password, setIsEnterPassopen }
       <span className={styles.keyContainer}>
         Public key:
         <input value={wallet.public_key} disabled />
-        <motion.div
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 1 }}
-          onClick={() => {
-            navigator.clipboard.writeText(wallet.public_key).then(() => {
-              toast.info("Copyied to clipboard!", {
-                position: "bottom-right",
-                autoClose: 1000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                theme: "dark",
-              });
-            });
-          }}
-        >
+        <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 1 }} onClick={handleCopyPublicKey}>
           <FontAwesomeIcon icon={faCopy} className={styles.copyIcon} />
         </motion.div>
       </span>
       <span className={styles.keyContainer}>
         Private key:
         <input value={wallet.encrypted_private_key} disabled type="password" />
-        <motion.div
-          whileHover={{ scale: 1.2 }}
-          whileTap={{ scale: 1 }}
-          onClick={() => {
-            if (password !== "") {
-              const reqData: decryptprivatekey_RequestData = {
-                encrypted_private_key: wallet.encrypted_private_key,
-                password: password,
-              };
-
-              const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {
-                toast.promise(response, {
-                  pending: {
-                    render() {
-                      return "Decrypting privatekey";
-                    },
-                  },
-                  success: {
-                    render() {
-                      navigator.clipboard.writeText(data.decryptedPrivateKey);
-                      return "Copyied to clipboard";
-                    },
-                  },
-                  error: "Err: please check your password",
-                });
-              });
-            } else {
-              toast.warn("please enter password!");
-              setIsEnterPassopen(true);
-            }
-          }}
-        >
+        <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 1 }} onClick={handleCopyPrivateKey}>
           <FontAwesomeIcon icon={faCopy} className={styles.copyIcon} />
         </motion.div>
       </span>

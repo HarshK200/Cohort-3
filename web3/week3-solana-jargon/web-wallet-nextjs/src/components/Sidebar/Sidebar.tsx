@@ -82,15 +82,17 @@ const Sidebar: React.FC<{
               />
             );
           })}
-          <motion.div
-            whileHover={{ scale: 1.2 }}
-            className={styles.addAccountPlus}
-            onClick={() => {
-              router.push("/onboarding");
-            }}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </motion.div>
+          <div className={styles.addAccountPlusContainer}>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              className={styles.addAccountPlus}
+              onClick={() => {
+                router.push("/onboarding");
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </motion.div>
+          </div>
         </div>
       </motion.nav>
     );

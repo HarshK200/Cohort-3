@@ -66,6 +66,10 @@
   border: 0.4rem solid black;
 }
 
+.addAccountPlusContainer {
+  margin-bottom: 1rem;
+}
+
 .addAccountPlus {
   display: grid;
   place-items: center;
