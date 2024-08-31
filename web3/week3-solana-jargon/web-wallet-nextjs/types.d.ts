@@ -81,3 +81,10 @@ interface decryptprivatekey_RequestData {
   encrypted_private_key: string;
   password: string;
 }
+
+interface WalletContainerComponenetProps {
+  wallet: wallet;
+  activeSession: recentActiveSessionInfo;
+  password: string;
+  setIsEnterPassopen: React.Dispatch<React.SetStateAction<boolean>>;
+}

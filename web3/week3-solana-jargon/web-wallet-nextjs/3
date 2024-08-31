@@ -15,8 +15,9 @@ import { PuffLoader } from "react-spinners";
 
 const Wallet = () => {
   const router = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(true);
   // const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
-  const [RPC_URL, setRPC_URL] = React.useState<string>(supported_RPCs.solana_devnet);
+  const [RPC_URL, setRPC_URL] = React.useState<string>("http://localhost:8899");
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
@@ -77,8 +78,8 @@ const Wallet = () => {
 
   function handleEnterPassSubmit() {
     setTimeout(() => {
-      setPassword("");
-    }, 60000); // sets the password to "" after 10 minutes
+      
+    }, 60000);
   }
 
   if (unlocked && selectedAccount) {
@@ -92,15 +93,7 @@ const Wallet = () => {
           <h1 className={styles.balance}>{balance} Sol</h1>
           <div className={styles.walletsContainer}>
             {selectedAccount.wallets.map((wallet, index) => {
-              return (
-                <WalletContainer
-                  key={index}
-                  wallet={wallet}
-                  activeSession={activeSession!}
-                  password={password}
-                  setIsEnterPassopen={setIsEnterPassopen}
-                />
-              );
+              return <WalletContainer key={index} wallet={wallet} activeSession={activeSession!} />;
             })}
           </div>
         </section>
@@ -116,34 +109,31 @@ const Wallet = () => {
           pauseOnHover={false}
           theme="dark"
         />
-        {isEnterpassOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0, x: 0 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0 }}
-            className={`glass ${styles.enterPassDiv}`}
-          >
-            <h1>Enter password</h1>
-            <div className={styles.passInputContainer}>
-              <input
-                className={styles.passInput}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 1.01 }}
-                className={`btn ${styles.submitbtn}`}
-                onClick={handleEnterPassSubmit}
-              >
-                <PuffLoader loading={false} color="white" size={30} />
-                <span>Submit</span>
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
+        <motion.div
+          initial={{ opacity: 0, scale: 0, x: 0 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          className={`glass ${styles.enterPassDiv}`}
+        >
+          <h1>Enter password</h1>
+          <div className={styles.passInputContainer}>
+            <input
+              className={styles.passInput}
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 1.01 }}
+              className={`btn ${styles.submitbtn}`}
+              onClick={handleEnterPassSubmit}
+            >
+              <PuffLoader loading={false} color="white" size={30} />
+              <span>Submit</span>
+            </motion.button>
+          </div>
+        </motion.div>
       </main>
     );
   }
@@ -151,7 +141,7 @@ const Wallet = () => {
 
 export default Wallet;
 
-const WalletContainer = ({ wallet, activeSession, password, setIsEnterPassopen }: WalletContainerComponenetProps) => {
+const WalletContainer = ({ wallet, activeSession }: { wallet: wallet; activeSession: recentActiveSessionInfo }) => {
   const supportedBlockhains = [
     { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
     // { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
@@ -202,32 +192,27 @@ const WalletContainer = ({ wallet, activeSession, password, setIsEnterPassopen }
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 1 }}
           onClick={() => {
-            if (password !== "") {
-              const reqData: decryptprivatekey_RequestData = {
-                encrypted_private_key: wallet.encrypted_private_key,
-                password: password,
-              };
+            const reqData: decryptprivatekey_RequestData = {
+              encrypted_private_key: wallet.encrypted_private_key,
+              password: "123",
+            };
 
-              const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {
-                toast.promise(response, {
-                  pending: {
-                    render() {
-                      return "Decrypting privatekey";
-                    },
+            const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {
+              toast.promise(response, {
+                pending: {
+                  render() {
+                    return "Decrypting privatekey";
                   },
-                  success: {
-                    render() {
-                      navigator.clipboard.writeText(data.decryptedPrivateKey);
-                      return "Copyied to clipboard";
-                    },
+                },
+                success: {
+                  render() {
+                    navigator.clipboard.writeText(data.decryptedPrivateKey);
+                    return "Copyied to clipboard";
                   },
-                  error: "Err: please check your password",
-                });
+                },
+                error: "Err: please check your password",
               });
-            } else {
-              toast.warn("please enter password!");
-              setIsEnterPassopen(true);
-            }
+            });
           }}
         >
           <FontAwesomeIcon icon={faCopy} className={styles.copyIcon} />
