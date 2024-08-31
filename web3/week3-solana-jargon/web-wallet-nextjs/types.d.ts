@@ -76,3 +76,8 @@ interface AccountComponentProps {
   activeSession: recentActiveSessionInfo;
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
 }
+
+interface decryptprivatekey_RequestData {
+  encrypted_private_key: string;
+  password: string;
+}

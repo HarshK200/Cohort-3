@@ -25,6 +25,7 @@ function generateForSolana(mnemonic_words_array: string[]): { publickey: string;
   const publickey = publicKey.toBase58();
   const privatekey = bs58.encode(secretKey);
 
+  console.log("priavtekey: ", privatekey);
   return { publickey, privatekey };
 }
 

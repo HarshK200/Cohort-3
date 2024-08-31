@@ -110,6 +110,7 @@ const Account: React.FC<AccountComponentProps> = ({ user, activeSession, setActi
   return (
     <motion.div
       whileHover={{ scale: 1.15 }}
+      whileTap={{ scale: 1 }}
       className={`${styles.user} ${activeSession.active_accountId === user.accountId ? styles.activeUser : ""}`}
       onClick={handleClick}
     >

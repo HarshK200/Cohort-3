@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
-import { supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
+import { supported_RPCs, supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
 import { easeIn, motion } from "framer-motion";
@@ -15,7 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 const Wallet = () => {
   const router = useRouter();
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
+  // const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
+  const [RPC_URL, setRPC_URL] = React.useState<string>("http://localhost:8899");
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
@@ -83,11 +84,22 @@ const Wallet = () => {
           <h1 className={styles.balance}>{balance} Sol</h1>
           <div className={styles.walletsContainer}>
             {selectedAccount.wallets.map((wallet, index) => {
-              return <WalletContainer wallet={wallet} activeSession={activeSession!} />;
+              return <WalletContainer key={index} wallet={wallet} activeSession={activeSession!} />;
             })}
           </div>
         </section>
-        <ToastContainer />
+        <ToastContainer
+          position="bottom-right"
+          autoClose={1000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover={false}
+          theme="dark"
+        />
       </main>
     );
   }
@@ -142,7 +154,33 @@ const WalletContainer = ({ wallet, activeSession }: { wallet: wallet; activeSess
       <span className={styles.keyContainer}>
         Private key:
         <input value={wallet.encrypted_private_key} disabled type="password" />
-        <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 1 }}>
+        <motion.div
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 1 }}
+          onClick={() => {
+            const reqData: decryptprivatekey_RequestData = {
+              encrypted_private_key: wallet.encrypted_private_key,
+              password: "123",
+            };
+
+            const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {
+              toast.promise(response, {
+                pending: {
+                  render() {
+                    return "Decrypting privatekey";
+                  },
+                },
+                success: {
+                  render() {
+                    navigator.clipboard.writeText(data.decryptedPrivateKey);
+                    return "Copyied to clipboard!";
+                  },
+                },
+                error: "Err: please check your password",
+              });
+            });
+          }}
+        >
           <FontAwesomeIcon icon={faCopy} className={styles.copyIcon} />
         </motion.div>
       </span>
