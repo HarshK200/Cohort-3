@@ -25,8 +25,6 @@
 
 .walletsContainer {
   margin-top: 2rem;
-  width: 100%;
-  height: 100%;
   padding: 3rem;
   display: grid;
   grid-gap: 1rem 1rem;
@@ -37,10 +35,47 @@
 }
 
 .wallet {
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  padding-top: 4rem;
+  width: 30rem;
+  padding: 3rem 2rem;
   gap: 2rem;
-  /* background-color: orange; */
+}
+
+.keyContainer {
+  font-weight: bold;
+  display: grid;
+  align-items: center;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 2fr 0.3fr;
+}
+
+.keyContainer input {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 5px;
+}
+
+.wallet_blockchain {
+  font-weight: bold;
+  position: relative;
+  top: 1.8rem;
+  right: 9rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.solanaLogo {
+  height: 2rem;
+}
+
+.copyIcon {
+  color: var(--call-to-action);
+  align-self: center;
+  padding: 0.5rem;
+  cursor: pointer;
 }
