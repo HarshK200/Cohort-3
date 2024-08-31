@@ -80,7 +80,7 @@ const Wallet = () => {
           <header className={styles.heading}>
             <h1>VAULT</h1>
           </header>
-          <h1 className={styles.balance}>{0} Sol</h1>
+          <h1 className={styles.balance}>{balance} Sol</h1>
           <div className={styles.walletsContainer}>
             {selectedAccount.wallets.map((wallet, index) => {
               return <WalletContainer wallet={wallet} activeSession={activeSession!} />;
