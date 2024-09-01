@@ -94,3 +94,10 @@ interface EnterPassPopupProps {
   handleEnterPassSubmit: () => Promise<void>;
   loading: boolean;
 }
+
+interface generateWallet_RequestData {
+  blockchain_type: supportedBlockchains;
+  password: string;
+  encryptedMnemonic: string;
+  nextAvilWalletId: number;
+}
