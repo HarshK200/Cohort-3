@@ -8,21 +8,24 @@ import axios from "axios";
 import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { SolanaLogo } from "@public/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faArrowDown, faArrowUp, faCopy, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PuffLoader } from "react-spinners";
 import bcrypt from "bcryptjs";
+import WalletActionBtns from "@/components/WalletActionBtns/WalletActionBtns";
+import EnterPassPopup from "@/components/EnterPassPopup/EnterPassPopup";
 
 const Wallet = () => {
   const router = useRouter();
-  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
+  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_DEVNET_RPC!);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
   const [unlocked, setUnlocked] = React.useState<object>();
   const [isEnterpassOpen, setIsEnterPassopen] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>("");
+  const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const unlocked = sessionStorage.getItem("unlocked");
@@ -76,22 +79,27 @@ const Wallet = () => {
   }, [activeSession]);
 
   async function handleEnterPassSubmit() {
+    setPassPopupLoading(true);
     const hashed_pass = localStorage.getItem("hashed_pass");
     const correct = await bcrypt.compare(password, hashed_pass!);
     if (correct) {
       setIsEnterPassopen(false);
+      setPassPopupLoading(false);
       handleCopyPrivateKey();
     } else {
-      toast.error("Incorrect password!", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      setTimeout(() => {
+        setPassPopupLoading(false);
+        toast.error("Incorrect password!", {
+          position: "bottom-right",
+          autoClose: 1000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      }, 300);
     }
     setTimeout(() => {
       setPassword("");
@@ -136,6 +144,7 @@ const Wallet = () => {
             <h1>VAULT</h1>
           </header>
           <h1 className={styles.balance}>{balance} Sol</h1>
+          <WalletActionBtns />
           <div className={styles.walletsContainer}>
             {selectedAccount.wallets.map((wallet, index) => {
               return (
@@ -149,6 +158,7 @@ const Wallet = () => {
             })}
           </div>
         </section>
+
         <ToastContainer
           position="bottom-right"
           autoClose={1000}
@@ -164,32 +174,12 @@ const Wallet = () => {
 
         <AnimatePresence>
           {isEnterpassOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0 }}
-              className={`glass ${styles.enterPassDiv}`}
-            >
-              <h1>Enter password</h1>
-              <div className={styles.passInputContainer}>
-                <input
-                  className={styles.passInput}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                />
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 1.01 }}
-                  className={`btn ${styles.submitbtn}`}
-                  onClick={handleEnterPassSubmit}
-                >
-                  <PuffLoader loading={false} color="white" size={30} />
-                  <span>Submit</span>
-                </motion.button>
-              </div>
-            </motion.div>
+            <EnterPassPopup
+              password={password}
+              setPassword={setPassword}
+              handleEnterPassSubmit={handleEnterPassSubmit}
+              loading={passPopupLoading}
+            />
           )}
         </AnimatePresence>
       </main>

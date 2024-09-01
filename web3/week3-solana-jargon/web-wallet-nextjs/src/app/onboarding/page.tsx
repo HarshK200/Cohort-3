@@ -8,6 +8,7 @@ import CreatePassword from "@/components/CreatePassword/CreatePassword";
 import axios from "axios";
 import { supportedBlockchains } from "@/enums";
 import { AnimatePresence, motion } from "framer-motion";
+import { ToastContainer } from "react-toastify";
 
 const Onboarding = () => {
   const [currentComponent, setCurrentComponent] = React.useState<number>(0);
@@ -34,19 +35,25 @@ const Onboarding = () => {
   ];
 
   const variants = {
-    initial: { opacity: 0, x: 200 },
+    initial: { opacity: 0, x: 100 },
     animate: { opacity: 1, x: 0 },
-    exit: { opacity: 0, x: -200 },
+    exit: { opacity: 0, x: -100 },
+  };
+
+  const transition = {
+    duration: 0.15, // Duration of the transition in seconds
+    ease: "easeInOut", // Easing function for the transition
   };
 
   return (
-    <div style={{ overflow: "hidden", height: "100%"}}>
+    <div style={{ overflow: "hidden", height: "100%" }}>
       <AnimatePresence mode="wait">
         <motion.div
           key={currentComponent} // Key ensures that each component change triggers animation
           initial="initial"
           animate="animate"
           exit="exit"
+          transition={transition}
           variants={variants}
           className={`${styles.onboardingContainer}`}
         >

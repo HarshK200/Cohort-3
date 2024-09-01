@@ -87,3 +87,10 @@ interface WalletContainerComponenetProps {
   activeSession: recentActiveSessionInfo;
   handleCopyPrivateKey: () => void;
 }
+
+interface EnterPassPopupProps {
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  handleEnterPassSubmit: () => Promise<void>;
+  loading: boolean;
+}

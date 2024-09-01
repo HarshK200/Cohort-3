@@ -6,9 +6,10 @@ import React from "react";
 import { PuffLoader } from "react-spinners";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import * as bcrypt from "bcryptjs";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import EnterPassPopup from "../EnterPassPopup/EnterPassPopup";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
@@ -25,8 +26,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     setPassmatch(false);
   }, [password, cnfPassword]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setFormSubmitted(true);
 
     // When user is onboaring for the first time
@@ -49,7 +49,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         active_wallet: newSecureUser.wallets[0],
       };
       localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
-      router.push("/")
+      router.push("/");
     }
     // when user already has account and creating a new one
     else {
@@ -77,14 +77,14 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
   };
 
   const hashed_pass = localStorage.getItem("hashed_pass");
-  if (hashed_pass) {
-    const handlePassSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const unlocked = sessionStorage.getItem("unlocked");
+  if (hashed_pass && unlocked) {
+    const handlePassSubmit = async () => {
       setFormSubmitted(true);
       const correct = await bcrypt.compare(password, hashed_pass);
       if (correct) {
         sessionStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
-        await handleSubmit(e);
+        await handleSubmit();
         return;
       } else {
         toast.error("Incorrect password!", {
@@ -104,34 +104,21 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     };
 
     return (
-      <form className={styles.form} onSubmit={handlePassSubmit}>
-        <h1>Enter password</h1>
-        <input
-          type="password"
-          className={styles.passInput}
-          placeholder="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          required={true}
+      <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <EnterPassPopup
+          password={password}
+          setPassword={setPassword}
+          handleEnterPassSubmit={handlePassSubmit}
+          loading={formSubmitted}
         />
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 1.01 }}
-          type="submit"
-          className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}
-        >
-          <PuffLoader loading={formSubmitted} color="white" size={30} />
-          <span>Submit</span>
-        </motion.button>
-      </form>
+        <ToastContainer />
+      </div>
     );
   }
 
   return (
     <main className={styles.main}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.form}>
         <h1>Create your password</h1>
         <div className={styles.infoTextContainer}>
           <FontAwesomeIcon icon={faInfoCircle} className={styles.infoIcon} />
@@ -161,11 +148,12 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         <button
           type="submit"
           className={`btn glass ${styles.submitbtn} ${formSubmitted || !passmatch ? "disabled" : ""} `}
+          onClick={handleSubmit}
         >
           <PuffLoader loading={formSubmitted} color="white" size={30} />
           <span>Submit</span>
         </button>
-      </form>
+      </div>
     </main>
   );
 };
