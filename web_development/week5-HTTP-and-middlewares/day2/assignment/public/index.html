@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Assignment</title>
+  </head>
+  <body>
+    <input id="a" type="text" placeholder="a" />
+    <input id="b" type="text" placeholder="b" />
+    <button onclick="handleSubmit()">Add</button>
+
+    <script>
+      async function handleSubmit() {
+        const a = document.querySelector("#a").value;
+        const b = document.querySelector("#b").value;
+        const result = await fetch("http://localhost:3001/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ a: a, b: b }),
+        });
+        alert(`Sum: ${(await result.json()).sum}`);
+      }
+    </script>
+  </body>
+</html>
