@@ -8,10 +8,9 @@ import axios from "axios";
 import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { SolanaLogo } from "@public/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowDown, faArrowUp, faCopy, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faCopy } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { PuffLoader } from "react-spinners";
 import bcrypt from "bcryptjs";
 import WalletActionBtns from "@/components/WalletActionBtns/WalletActionBtns";
 import EnterPassPopup from "@/components/EnterPassPopup/EnterPassPopup";
@@ -23,7 +22,7 @@ const Wallet = () => {
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
   const [unlocked, setUnlocked] = React.useState<object>();
-  const [isEnterpassOpen, setIsEnterPassopen] = React.useState<boolean>(false);
+  const [passPopupOpen, setPassPopupOpen] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>("");
   const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
 
@@ -41,10 +40,14 @@ const Wallet = () => {
       setActiveSession(JSON.parse(activeAccount) as recentActiveSessionInfo);
     } else {
       const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
-      setActiveSession({
-        active_accountId: secureUsers[0].accountId,
-        active_wallet: secureUsers[0].wallets[0],
-      });
+      if (secureUsers) {
+        setActiveSession({
+          active_accountId: secureUsers[0].accountId,
+          active_wallet: secureUsers[0].wallets[0],
+        });
+      } else {
+        router.push("/onboarding");
+      }
     }
   }, []);
 
@@ -66,12 +69,12 @@ const Wallet = () => {
         params: [activeSession?.active_wallet.public_key],
       };
       try {
-        let response;
-        axios.post(RPC_URL, reqData).then((res) => {
-          response = res.data;
-          // console.log(response);
-          setBalance(response.result.value / 1000000000); // converting lamports to sol
-        });
+        // let response;
+        // axios.post(RPC_URL, reqData).then((res) => {
+        //   response = res.data;
+        //   // console.log(response);
+        //   setBalance(response.result.value / 1000000000); // converting lamports to sol
+        // });
       } catch (e) {
         console.log("Err making rpc call", e);
       }
@@ -83,9 +86,9 @@ const Wallet = () => {
     const hashed_pass = localStorage.getItem("hashed_pass");
     const correct = await bcrypt.compare(password, hashed_pass!);
     if (correct) {
-      setIsEnterPassopen(false);
+      setPassPopupOpen(false);
       setPassPopupLoading(false);
-      handleCopyPrivateKey();
+      // handleCopyPrivateKey();
     } else {
       setTimeout(() => {
         setPassPopupLoading(false);
@@ -106,10 +109,82 @@ const Wallet = () => {
     }, 60000); // sets the password to "" after 10 minutes
   }
 
+  if (unlocked && selectedAccount) {
+    return (
+      <main className={styles.main}>
+        <Sidebar setActiveSession={setActiveSession} activeSession={activeSession} />
+        <section className={styles.section}>
+          <header className={styles.heading}>
+            <h1>VAULT</h1>
+          </header>
+          <h1 className={styles.balance}>{balance} Sol</h1>
+          <WalletActionBtns
+            password={password}
+            setPassPopupOpen={setPassPopupOpen}
+            setActiveSession={setActiveSession}
+          />
+          <div className={styles.walletsContainer}>
+            {selectedAccount.wallets.map((wallet, index) => {
+              return (
+                <WalletContainer
+                  key={index}
+                  wallet={wallet}
+                  activeSession={activeSession!}
+                  setActiveSession={setActiveSession}
+                  password={password}
+                  setPassPopupOpen={setPassPopupOpen}
+                />
+              );
+            })}
+          </div>
+        </section>
+
+        <ToastContainer
+          position="bottom-right"
+          autoClose={2000}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover={false}
+          theme="dark"
+        />
+
+        <AnimatePresence>
+          {passPopupOpen && (
+            <EnterPassPopup
+              password={password}
+              setPassword={setPassword}
+              handleEnterPassSubmit={handleEnterPassSubmit}
+              loading={passPopupLoading}
+            />
+          )}
+        </AnimatePresence>
+      </main>
+    );
+  }
+};
+
+export default Wallet;
+
+const WalletContainer = ({
+  wallet,
+  activeSession,
+  setActiveSession,
+  password,
+  setPassPopupOpen,
+}: WalletContainerComponenetProps) => {
+  const supportedBlockhains = [
+    { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
+    // { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
+  ];
+
   const handleCopyPrivateKey = () => {
     if (password !== "") {
       const reqData: decryptprivatekey_RequestData = {
-        encrypted_private_key: activeSession?.active_wallet.encrypted_private_key!,
+        encrypted_private_key: wallet.encrypted_private_key,
         password: password,
       };
 
@@ -130,70 +205,10 @@ const Wallet = () => {
         });
       });
     } else {
-      toast.warn("please enter password!");
-      setIsEnterPassopen(true);
+      toast.warn("please enter password and try again");
+      setPassPopupOpen(true);
     }
   };
-
-  if (unlocked && selectedAccount) {
-    return (
-      <main className={styles.main}>
-        <Sidebar setActiveSession={setActiveSession} activeSession={activeSession} />
-        <section className={styles.section}>
-          <header className={styles.heading}>
-            <h1>VAULT</h1>
-          </header>
-          <h1 className={styles.balance}>{balance} Sol</h1>
-          <WalletActionBtns />
-          <div className={styles.walletsContainer}>
-            {selectedAccount.wallets.map((wallet, index) => {
-              return (
-                <WalletContainer
-                  key={index}
-                  wallet={wallet}
-                  activeSession={activeSession!}
-                  handleCopyPrivateKey={handleCopyPrivateKey}
-                />
-              );
-            })}
-          </div>
-        </section>
-
-        <ToastContainer
-          position="bottom-right"
-          autoClose={1000}
-          hideProgressBar={true}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover={false}
-          theme="dark"
-        />
-
-        <AnimatePresence>
-          {isEnterpassOpen && (
-            <EnterPassPopup
-              password={password}
-              setPassword={setPassword}
-              handleEnterPassSubmit={handleEnterPassSubmit}
-              loading={passPopupLoading}
-            />
-          )}
-        </AnimatePresence>
-      </main>
-    );
-  }
-};
-
-export default Wallet;
-
-const WalletContainer = ({ wallet, activeSession, handleCopyPrivateKey }: WalletContainerComponenetProps) => {
-  const supportedBlockhains = [
-    { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
-    // { name: supportedBlockchains.Etherium, logo: <EtheriumLogo className={styles.etheriumLogo} /> },
-  ];
 
   const handleCopyPublicKey = () => {
     navigator.clipboard.writeText(wallet.public_key).then(() => {
@@ -225,6 +240,13 @@ const WalletContainer = ({ wallet, activeSession, handleCopyPrivateKey }: Wallet
       transition={{ ease: easeIn }}
       className={`glass ${styles.wallet}`}
     >
+      <div className={styles.WalletNumber}>
+        Wallet {wallet.wallet_id + 1}
+        <span className={styles.wallet_blockchain}>
+          Blockchain:
+          {wallet_blockchain_icon!}
+        </span>
+      </div>
       <span className={styles.keyContainer}>
         Public key:
         <input value={wallet.public_key} disabled />
@@ -239,10 +261,16 @@ const WalletContainer = ({ wallet, activeSession, handleCopyPrivateKey }: Wallet
           <FontAwesomeIcon icon={faCopy} className={styles.copyIcon} />
         </motion.div>
       </span>
-      <span className={styles.wallet_blockchain}>
-        Blockchain:
-        {wallet_blockchain_icon!}
-      </span>
+      <motion.button
+        className={`btn glass ${styles.getBalanceBtn}`}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 1.02 }}
+        onClick={() => {
+          setActiveSession({ ...activeSession, active_wallet: wallet });
+        }}
+      >
+        Get Balance
+      </motion.button>
     </motion.div>
   );
 };

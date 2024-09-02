@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
     const encryptedPrivateKey = cryptr.encrypt(keyPair.privatekey);
 
     const newWallet: wallet = {
+      wallet_id: 0, // wallet id 0 since user is creating a new account
       blockchain_type: supportedBlockchains.Solana,
       encrypted_private_key: encryptedPrivateKey,
       public_key: keyPair.publickey,

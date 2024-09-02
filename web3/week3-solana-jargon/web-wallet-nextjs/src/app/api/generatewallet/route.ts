@@ -16,6 +16,7 @@ function solanaWalletGenerator(mnemonic: string, nextAvilWalletId: number, crypt
   console.log("pub key: ", publicKey.toBase58());
   console.log("private key: ", bs58.encode(secretKey));
   const wallet: wallet = {
+    wallet_id: nextAvilWalletId,
     blockchain_type: supportedBlockchains.Solana,
     public_key: publicKey.toBase58(),
     encrypted_private_key: cryptr.encrypt(bs58.encode(secretKey)),
@@ -31,10 +32,10 @@ export async function POST(req: NextRequest) {
 
   let generatedWallet: wallet;
   if (blockchain_type === supportedBlockchains.Solana) {
-    generatedWallet = solanaWalletGenerator(encryptedMnemonic, nextAvilWalletId, cryptr);
+    generatedWallet = solanaWalletGenerator(mnemonic, nextAvilWalletId, cryptr);
   } else {
     return new NextResponse(JSON.stringify({ err: "the choosen blockchain_type is not supported" }), { status: 400 });
   }
 
-  return new NextResponse(JSON.stringify(generatedWallet!), { status: 200 });
+  return new NextResponse(JSON.stringify(generatedWallet), { status: 200 });
 }

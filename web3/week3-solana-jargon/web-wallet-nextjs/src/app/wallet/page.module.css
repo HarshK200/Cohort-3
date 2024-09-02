@@ -39,8 +39,18 @@
   display: flex;
   flex-direction: column;
   width: 30rem;
-  padding: 3rem 2rem;
+  padding: 1.5rem 2rem;
+  padding-top: 0;
   gap: 2rem;
+}
+
+.WalletNumber {
+  display: flex;
+  width: 100%;
+  font-weight: bolder;
+  font-size: 1.5rem;
+  padding-top: 1rem;
+  justify-content: space-between;
 }
 
 .keyContainer {
@@ -62,16 +72,16 @@
 
 .wallet_blockchain {
   font-weight: bold;
-  position: relative;
-  top: 1.8rem;
+  top: 0.3rem;
   right: 9rem;
   display: flex;
   align-items: center;
   gap: 1rem;
+  font-size: 1.2rem;
 }
 
 .solanaLogo {
-  height: 2rem;
+  height: 1.5rem;
 }
 
 .copyIcon {

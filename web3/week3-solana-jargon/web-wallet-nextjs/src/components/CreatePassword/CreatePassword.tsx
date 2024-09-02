@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import styles from "./CreatePassword.module.css";
-import { FormEvent } from "react";
 import React from "react";
 import { PuffLoader } from "react-spinners";
 import axios from "axios";
@@ -65,6 +64,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       const newSecureUser = response.data.secureuser as secureUser;
       secureUsers.push(newSecureUser);
       localStorage.setItem("secureUsers", JSON.stringify(secureUsers));
+      // making the current account and wallet to be active
       const recentActiveSession: recentActiveSessionInfo = {
         active_accountId: nextAvilId,
         active_wallet: newSecureUser.wallets[0],

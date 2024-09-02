@@ -34,6 +34,7 @@ interface getEncryptedMnemonicReqData {
 }
 
 interface wallet {
+  wallet_id: number;
   blockchain_type: supportedBlockchains; // would be somthing like [Solana, Etherium]
   public_key: string;
   encrypted_private_key: string;
@@ -85,7 +86,9 @@ interface decryptprivatekey_RequestData {
 interface WalletContainerComponenetProps {
   wallet: wallet;
   activeSession: recentActiveSessionInfo;
-  handleCopyPrivateKey: () => void;
+  setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
+  password: string;
+  setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface EnterPassPopupProps {
@@ -100,4 +103,10 @@ interface generateWallet_RequestData {
   password: string;
   encryptedMnemonic: string;
   nextAvilWalletId: number;
+}
+
+interface walletActioBtnsComponentProps {
+  password: string;
+  setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
 }

@@ -13,6 +13,7 @@ const EnterPassPopup: React.FC<EnterPassPopupProps> = ({ password, setPassword, 
       <h1>Enter password</h1>
       <div className={styles.passInputContainer}>
         <input
+          type="password"
           className={styles.passInput}
           value={password}
           onChange={(e) => {
