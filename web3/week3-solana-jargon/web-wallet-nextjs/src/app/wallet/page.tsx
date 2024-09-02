@@ -5,19 +5,20 @@ import { useRouter } from "next/navigation";
 import { supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
-import { AnimatePresence, easeIn, motion } from "framer-motion";
+import { AnimatePresence, delay, easeIn, motion } from "framer-motion";
 import { SolanaLogo } from "@public/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import bcrypt from "bcryptjs";
 import WalletActionBtns from "@/components/WalletActionBtns/WalletActionBtns";
 import EnterPassPopup from "@/components/EnterPassPopup/EnterPassPopup";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const Wallet = () => {
   const router = useRouter();
-  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_DEVNET_RPC!);
+  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
@@ -25,6 +26,7 @@ const Wallet = () => {
   const [passPopupOpen, setPassPopupOpen] = React.useState<boolean>(false);
   const [password, setPassword] = React.useState<string>("");
   const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
+  const [selecteWalletDropdownOpen, setSelecteWalletDropdownOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const unlocked = sessionStorage.getItem("unlocked");
@@ -73,7 +75,7 @@ const Wallet = () => {
         axios.post(RPC_URL, reqData).then((res) => {
           response = res.data;
           // console.log(response);
-          setBalance(response.result.value / 1000000000); // converting lamports to sol
+          setBalance(response.result.value / LAMPORTS_PER_SOL); // converting lamports to sol
         });
       } catch (e) {
         console.log("Err making rpc call", e);
@@ -124,18 +126,14 @@ const Wallet = () => {
             setActiveSession={setActiveSession}
           />
           <div className={styles.walletsContainer}>
-            {selectedAccount.wallets.map((wallet, index) => {
-              return (
-                <WalletContainer
-                  key={index}
-                  wallet={wallet}
-                  activeSession={activeSession!}
-                  setActiveSession={setActiveSession}
-                  password={password}
-                  setPassPopupOpen={setPassPopupOpen}
-                />
-              );
-            })}
+            <WalletContainer
+              key={activeSession?.active_wallet.wallet_id}
+              wallet={activeSession!?.active_wallet}
+              activeSession={activeSession!}
+              setActiveSession={setActiveSession}
+              password={password}
+              setPassPopupOpen={setPassPopupOpen}
+            />
           </div>
         </section>
 
@@ -161,6 +159,55 @@ const Wallet = () => {
               loading={passPopupLoading}
             />
           )}
+          _
+          {
+            <div className={styles.selectedWalletWrapper}>
+              <AnimatePresence>
+                {selecteWalletDropdownOpen && (
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 100 }}
+                    exit={{ y: 20, opacity: 0 }}
+                    transition={{ duration: 0.1 }}
+                  >
+                    <div className={`glass ${styles.selectWalletDropdownOptions}`}>
+                      {selectedAccount.wallets.toReversed().map((wallet) => {
+                        if (wallet.wallet_id !== activeSession?.active_wallet.wallet_id) {
+                          return (
+                            <motion.div
+                              key={wallet.wallet_id}
+                              className={styles.walletOption}
+                              whileHover={{ scale: 1.05, opacity: "50%" }}
+                              onClick={() => {
+                                const updatedActiveSession: recentActiveSessionInfo = {
+                                  active_accountId: activeSession!?.active_accountId,
+                                  active_wallet: wallet,
+                                };
+                                localStorage.setItem("recentActiveSession", JSON.stringify(updatedActiveSession));
+                                setActiveSession(updatedActiveSession);
+                                setSelecteWalletDropdownOpen(false);
+                              }}
+                            >
+                              <span>Wallet {wallet.wallet_id + 1}</span>
+                            </motion.div>
+                          );
+                        }
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <div
+                className={styles.selectedWallet}
+                onClick={() => {
+                  setSelecteWalletDropdownOpen(!selecteWalletDropdownOpen);
+                }}
+              >
+                Wallet {activeSession?.active_wallet.wallet_id! + 1}
+                <FontAwesomeIcon icon={faCaretUp} />
+              </div>
+            </div>
+          }
         </AnimatePresence>
       </main>
     );

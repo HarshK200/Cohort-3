@@ -29,8 +29,7 @@
   padding: 3rem;
   display: grid;
   grid-gap: 1rem 1rem;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-auto-flow: row;
   /* place-items: center; */
 }
@@ -89,4 +88,43 @@
   align-self: center;
   padding: 0.5rem;
   cursor: pointer;
+}
+
+.selectedWalletWrapper {
+  position: absolute;
+  left: 5rem;
+  bottom: 1rem;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-weight: bolder;
+  font-size: 1.2rem;
+  gap: 1rem;
+  cursor: pointer;
+  margin: 0 0 2rem 0;
+}
+
+.selectWalletDropdownOptions {
+  border-radius: 0rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  font-weight: normal;
+  font-size: 1.04rem;
+  gap: 1rem;
+  min-width: 6rem;
+}
+
+.selectedWallet {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 2rem;
+}
+
+.walletOption {
+  width: 100%;
+  padding: 0 2rem;
 }
