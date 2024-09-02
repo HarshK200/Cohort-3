@@ -69,12 +69,12 @@ const Wallet = () => {
         params: [activeSession?.active_wallet.public_key],
       };
       try {
-        // let response;
-        // axios.post(RPC_URL, reqData).then((res) => {
-        //   response = res.data;
-        //   // console.log(response);
-        //   setBalance(response.result.value / 1000000000); // converting lamports to sol
-        // });
+        let response;
+        axios.post(RPC_URL, reqData).then((res) => {
+          response = res.data;
+          // console.log(response);
+          setBalance(response.result.value / 1000000000); // converting lamports to sol
+        });
       } catch (e) {
         console.log("Err making rpc call", e);
       }
