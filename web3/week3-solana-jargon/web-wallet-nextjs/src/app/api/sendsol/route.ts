@@ -18,6 +18,7 @@ async function makeTransaction(
   reciever_publicKey_bs58: string,
   amount: number,
 ) {
+  // const connection = new Connection("http://localhost:8899", "confirmed");
   // const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_DEVNET_RPC!, "confirmed");
   const connection = new Connection(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!, "confirmed");
   const transaction = new Transaction();

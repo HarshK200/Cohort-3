@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
 import { supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
@@ -31,6 +31,7 @@ const Wallet = () => {
   const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
   const [selecteWalletDropdownOpen, setSelecteWalletDropdownOpen] = React.useState<boolean>(false);
   const [sendMoneyPopupOpen, setSendMoneyPopupOpen] = React.useState<boolean>(false);
+  const passPopupCallback = useRef<() => void>();
 
   React.useEffect(() => {
     const unlocked = sessionStorage.getItem("unlocked");
@@ -89,30 +90,41 @@ const Wallet = () => {
 
   async function handleEnterPassSubmit() {
     setPassPopupLoading(true);
-    const hashed_pass = localStorage.getItem("hashed_pass");
-    const correct = await bcrypt.compare(password, hashed_pass!);
-    if (correct) {
-      setPassPopupOpen(false);
-      setPassPopupLoading(false);
-      // handleCopyPrivateKey();
-    } else {
-      setTimeout(() => {
+
+    try {
+      const hashed_pass = localStorage.getItem("hashed_pass");
+      if (!hashed_pass) {
+        throw new Error("No hashed password found!");
+      }
+
+      const correct = await bcrypt.compare(password, hashed_pass!);
+      if (correct) {
+        setPassPopupOpen(false);
         setPassPopupLoading(false);
-        toast.error("Incorrect password!", {
-          position: "bottom-right",
-          autoClose: 1000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
-      }, 300);
-    }
-    setTimeout(() => {
+
+        if (passPopupCallback.current) {
+          console.log(passPopupCallback.current);
+          passPopupCallback.current!();
+          passPopupCallback.current = undefined;
+        } else {
+          setPassPopupLoading(false);
+          toast.error("Incorrect password!", {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
+      }
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
       setPassword("");
-    }, 60000); // sets the password to "" after 10 minutes
+    }
   }
 
   if (unlocked && selectedAccount) {
@@ -138,6 +150,7 @@ const Wallet = () => {
               setActiveSession={setActiveSession}
               password={password}
               setPassPopupOpen={setPassPopupOpen}
+              passPopupCallback={passPopupCallback}
             />
           </div>
         </section>
@@ -237,6 +250,7 @@ const WalletContainer = ({
   setActiveSession,
   password,
   setPassPopupOpen,
+  passPopupCallback,
 }: WalletContainerComponenetProps) => {
   const supportedBlockhains = [
     { name: supportedBlockchains.Solana, logo: <SolanaLogo className={styles.solanaLogo} /> },
@@ -268,6 +282,7 @@ const WalletContainer = ({
       });
     } else {
       toast.warn("please enter password and try again");
+      passPopupCallback.current = handleCopyPrivateKey;
       setPassPopupOpen(true);
     }
   };

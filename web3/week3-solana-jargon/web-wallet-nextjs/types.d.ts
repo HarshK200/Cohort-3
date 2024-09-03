@@ -89,6 +89,7 @@ interface WalletContainerComponenetProps {
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
   password: string;
   setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  passPopupCallback: React.MutableRefObject<((password: string) => void) | undefined>;
 }
 
 interface EnterPassPopupProps {
