@@ -109,4 +109,20 @@ interface walletActioBtnsComponentProps {
   password: string;
   setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
+  setSendMoneyPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface SendMoneyPopup {
+  password: string;
+  setSendMoneyPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  activeSession: recentActiveSessionInfo;
+  balance: number;
+}
+
+interface sendSol_RequestData {
+  password: string;
+  sender_pubkey: string;
+  sender_encryptedPrivatekey: string;
+  reciever_publicKey: string;
+  amount: number;
 }

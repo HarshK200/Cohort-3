@@ -118,6 +118,7 @@
 }
 
 .selectedWallet {
+  color: white;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -127,4 +128,11 @@
 .walletOption {
   width: 100%;
   padding: 0 2rem;
+}
+
+.sendMoneyPopup {
+  background-color: red;
+  position: absolute;
+  width: 30rem;
+  height: 40rem;
 }

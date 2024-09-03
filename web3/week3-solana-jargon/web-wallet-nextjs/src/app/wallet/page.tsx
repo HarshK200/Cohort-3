@@ -15,10 +15,11 @@ import bcrypt from "bcryptjs";
 import WalletActionBtns from "@/components/WalletActionBtns/WalletActionBtns";
 import EnterPassPopup from "@/components/EnterPassPopup/EnterPassPopup";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import SendMoneyPopup from "@/components/SendMoneyPopup/SendMoneyPopup";
 
 const Wallet = () => {
   const router = useRouter();
-  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
+  const [RPC_URL, setRPC_URL] = React.useState<string>("http://localhost:8899");
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
@@ -27,6 +28,7 @@ const Wallet = () => {
   const [password, setPassword] = React.useState<string>("");
   const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
   const [selecteWalletDropdownOpen, setSelecteWalletDropdownOpen] = React.useState<boolean>(false);
+  const [sendMoneyPopupOpen, setSendMoneyPopupOpen] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const unlocked = sessionStorage.getItem("unlocked");
@@ -122,8 +124,9 @@ const Wallet = () => {
           <h1 className={styles.balance}>{balance} Sol</h1>
           <WalletActionBtns
             password={password}
-            setPassPopupOpen={setPassPopupOpen}
             setActiveSession={setActiveSession}
+            setPassPopupOpen={setPassPopupOpen}
+            setSendMoneyPopupOpen={setSendMoneyPopupOpen}
           />
           <div className={styles.walletsContainer}>
             <WalletContainer
@@ -142,11 +145,11 @@ const Wallet = () => {
           autoClose={2000}
           hideProgressBar={true}
           newestOnTop={false}
-          closeOnClick
+          closeOnClick={false}
           rtl={false}
-          pauseOnFocusLoss={false}
-          draggable
-          pauseOnHover={false}
+          pauseOnFocusLoss={true}
+          draggable={false}
+          pauseOnHover={true}
           theme="dark"
         />
 
@@ -159,55 +162,65 @@ const Wallet = () => {
               loading={passPopupLoading}
             />
           )}
+        </AnimatePresence>
+        <AnimatePresence>
           _
-          {
-            <div className={styles.selectedWalletWrapper}>
-              <AnimatePresence>
-                {selecteWalletDropdownOpen && (
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 100 }}
-                    exit={{ y: 20, opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                  >
-                    <div className={`glass ${styles.selectWalletDropdownOptions}`}>
-                      {selectedAccount.wallets.toReversed().map((wallet) => {
-                        if (wallet.wallet_id !== activeSession?.active_wallet.wallet_id) {
-                          return (
-                            <motion.div
-                              key={wallet.wallet_id}
-                              className={styles.walletOption}
-                              whileHover={{ scale: 1.05, opacity: "50%" }}
-                              onClick={() => {
-                                const updatedActiveSession: recentActiveSessionInfo = {
-                                  active_accountId: activeSession!?.active_accountId,
-                                  active_wallet: wallet,
-                                };
-                                localStorage.setItem("recentActiveSession", JSON.stringify(updatedActiveSession));
-                                setActiveSession(updatedActiveSession);
-                                setSelecteWalletDropdownOpen(false);
-                              }}
-                            >
-                              <span>Wallet {wallet.wallet_id + 1}</span>
-                            </motion.div>
-                          );
-                        }
-                      })}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-              <div
-                className={styles.selectedWallet}
-                onClick={() => {
-                  setSelecteWalletDropdownOpen(!selecteWalletDropdownOpen);
-                }}
-              >
-                Wallet {activeSession?.active_wallet.wallet_id! + 1}
-                <FontAwesomeIcon icon={faCaretUp} />
-              </div>
+          <div className={styles.selectedWalletWrapper}>
+            <AnimatePresence>
+              {selecteWalletDropdownOpen && (
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 100 }}
+                  exit={{ y: 20, opacity: 0 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  <div className={`glass ${styles.selectWalletDropdownOptions}`}>
+                    {selectedAccount.wallets.toReversed().map((wallet) => {
+                      if (wallet.wallet_id !== activeSession?.active_wallet.wallet_id) {
+                        return (
+                          <motion.div
+                            key={wallet.wallet_id}
+                            className={styles.walletOption}
+                            whileHover={{ scale: 1.05, opacity: "50%" }}
+                            onClick={() => {
+                              const updatedActiveSession: recentActiveSessionInfo = {
+                                active_accountId: activeSession!?.active_accountId,
+                                active_wallet: wallet,
+                              };
+                              localStorage.setItem("recentActiveSession", JSON.stringify(updatedActiveSession));
+                              setActiveSession(updatedActiveSession);
+                              setSelecteWalletDropdownOpen(false);
+                            }}
+                          >
+                            <span>Wallet {wallet.wallet_id + 1}</span>
+                          </motion.div>
+                        );
+                      }
+                    })}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div
+              className={styles.selectedWallet}
+              onClick={() => {
+                setSelecteWalletDropdownOpen(!selecteWalletDropdownOpen);
+              }}
+            >
+              Wallet {activeSession?.active_wallet.wallet_id! + 1}
+              <FontAwesomeIcon icon={faCaretUp} />
             </div>
-          }
+          </div>
+        </AnimatePresence>
+        <AnimatePresence>
+          {sendMoneyPopupOpen && (
+            <SendMoneyPopup
+              password={password}
+              setSendMoneyPopupOpen={setSendMoneyPopupOpen}
+              activeSession={activeSession!}
+              balance={balance!}
+            />
+          )}
         </AnimatePresence>
       </main>
     );

@@ -1,7 +1,7 @@
 import styles from "./WalletActionBtns.module.css";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp, faArrowDown } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faQrcode } from "@fortawesome/free-solid-svg-icons";
 import { supportedBlockchains } from "@/enums";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
   password,
   setPassPopupOpen,
   setActiveSession,
+  setSendMoneyPopupOpen,
 }) => {
   const handleCreateWallet = async () => {
     const activeSession = localStorage.getItem("recentActiveSession");
@@ -65,6 +66,15 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
     }
   };
 
+  const handleSendMoney = () => {
+    if (password === "") {
+      setPassPopupOpen(true);
+      toast.warn("please enter password and try again");
+      return;
+    }
+    setSendMoneyPopupOpen(true);
+  };
+
   return (
     <div className={styles.btnsContainer}>
       <motion.button
@@ -79,10 +89,10 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 1.02 }}
         className={`btn glass ${styles.sendMoneyBtn}`}
-        onClick={() => console.log("i was clicked!")}
+        onClick={handleSendMoney}
       >
-        <FontAwesomeIcon icon={faArrowUp} />
-        Send money
+        <FontAwesomeIcon icon={faPaperPlane} />
+        Send Sol
       </motion.button>
 
       <motion.button
@@ -91,8 +101,8 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
         className={`btn glass ${styles.recieveMoneyBtn}`}
         onClick={() => console.log("i was clicked!")}
       >
-        <FontAwesomeIcon icon={faArrowDown} />
-        Recieve money
+        <FontAwesomeIcon icon={faQrcode} />
+        Recieve Sol
       </motion.button>
     </div>
   );
