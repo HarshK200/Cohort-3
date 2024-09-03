@@ -28,6 +28,12 @@ const SendMoneyPopup: React.FC<SendMoneyPopup> = ({ password, setSendMoneyPopupO
       return;
     }
 
+    if (amount >= balance) {
+      toast.error("Insufficient balance");
+      setLoading(false);
+      return;
+    }
+
     const requestData: sendSol_RequestData = {
       password: password,
       sender_pubkey: activeSession.active_wallet.public_key,

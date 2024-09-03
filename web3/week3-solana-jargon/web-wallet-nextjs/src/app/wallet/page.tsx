@@ -19,7 +19,9 @@ import SendMoneyPopup from "@/components/SendMoneyPopup/SendMoneyPopup";
 
 const Wallet = () => {
   const router = useRouter();
-  const [RPC_URL, setRPC_URL] = React.useState<string>("http://localhost:8899");
+  const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_MAINNET_RPC!);
+  // const [RPC_URL, setRPC_URL] = React.useState<string>(process.env.NEXT_PUBLIC_SOLANA_DEVNET_RPC!);
+  // const [RPC_URL, setRPC_URL] = React.useState<string>("http://localhost:8899");
   const [balance, setBalance] = React.useState<number>();
   const [activeSession, setActiveSession] = React.useState<recentActiveSessionInfo>();
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
