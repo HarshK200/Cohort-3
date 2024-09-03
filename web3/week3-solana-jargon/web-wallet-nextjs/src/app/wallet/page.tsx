@@ -34,48 +34,53 @@ const Wallet = () => {
   const passPopupCallback = useRef<() => void>();
 
   React.useEffect(() => {
+    // after user first hit on the page this the wallet is unlocked and unlocked is pressisted until the tab is closed thanks to sessionStorage
+
     const unlocked = sessionStorage.getItem("unlocked");
     if (!unlocked) {
       router.push("/");
       return;
-    } else {
-      setUnlocked(JSON.parse(unlocked));
     }
+    setUnlocked(JSON.parse(unlocked));
 
+    // if user had a previous session load the previous active account and wallet state
     const activeAccount = localStorage.getItem("recentActiveSession");
     if (activeAccount) {
       setActiveSession(JSON.parse(activeAccount) as recentActiveSessionInfo);
     } else {
+      // if user already has account set the first account and the first wallet active
+
       const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
       if (secureUsers) {
         setActiveSession({
           active_accountId: secureUsers[0].accountId,
           active_wallet: secureUsers[0].wallets[0],
         });
-      } else {
-        router.push("/onboarding");
+        return;
       }
+      router.push("/onboarding");
     }
   }, []);
 
   React.useEffect(() => {
-    const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
-    if (secureUsers) {
-      secureUsers.forEach((user) => {
-        activeSession?.active_accountId === user.accountId ? setSelectedAccount(user) : null;
-      });
-    }
-  }, [activeSession]);
-
-  React.useEffect(() => {
     if (activeSession) {
-      const reqData: getaccountinfo_RequestData = {
-        jsonrpc: "2.0",
-        id: 0,
-        method: supportedSolanaRpcMethods.getBalance,
-        params: [activeSession?.active_wallet.public_key],
-      };
+      // set's the current account state since the activeSession is just active account id and active wallet id not the details
+      const secureUsers: secureUser[] = JSON.parse(localStorage.getItem("secureUsers")!);
+      if (secureUsers) {
+        secureUsers.forEach((user) => {
+          activeSession?.active_accountId === user.accountId ? setSelectedAccount(user) : null;
+        });
+      }
+
+      // updating the current balance for the active/selected wallet
       try {
+        const reqData: getaccountinfo_RequestData = {
+          jsonrpc: "2.0",
+          id: 0,
+          method: supportedSolanaRpcMethods.getBalance,
+          params: [activeSession?.active_wallet.public_key],
+        };
+
         let response;
         axios.post(RPC_URL, reqData).then((res) => {
           response = res.data;
@@ -103,7 +108,10 @@ const Wallet = () => {
         setPassPopupLoading(false);
 
         if (passPopupCallback.current) {
-          console.log(passPopupCallback.current);
+          console.log("password before callback: ", password);
+
+          console.log("the current callback func", passPopupCallback.current);
+
           passPopupCallback.current!();
           passPopupCallback.current = undefined;
         } else {
@@ -123,7 +131,10 @@ const Wallet = () => {
     } catch (e: any) {
       toast.error(e.message);
     } finally {
-      setPassword("");
+      // setting the password to empty string after 5 minutes (UX so user doesn't have to enter pass every time)
+      setTimeout(() => {
+        setPassword("");
+      }, 300000);
     }
   }
 
@@ -258,6 +269,9 @@ const WalletContainer = ({
   ];
 
   const handleCopyPrivateKey = () => {
+    console.log("password inside callback: ", password);
+
+    passPopupCallback.current = handleCopyPrivateKey;
     if (password !== "") {
       const reqData: decryptprivatekey_RequestData = {
         encrypted_private_key: wallet.encrypted_private_key,
@@ -282,7 +296,6 @@ const WalletContainer = ({
       });
     } else {
       toast.warn("please enter password and try again");
-      passPopupCallback.current = handleCopyPrivateKey;
       setPassPopupOpen(true);
     }
   };
