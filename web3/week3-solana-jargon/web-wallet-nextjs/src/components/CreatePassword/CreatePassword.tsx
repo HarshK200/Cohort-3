@@ -49,6 +49,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       };
       localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
       router.push("/");
+      return;
     }
     // when user already has account and creating a new one
     else {

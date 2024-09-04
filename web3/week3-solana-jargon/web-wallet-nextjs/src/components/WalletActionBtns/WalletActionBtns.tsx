@@ -70,6 +70,7 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
 
   const handleSendMoney = () => {
     if (password.current === "") {
+      passPopupCallback.current = handleSendMoney;
       setPassPopupOpen(true);
       toast.warn("please enter password and try again");
       return;
