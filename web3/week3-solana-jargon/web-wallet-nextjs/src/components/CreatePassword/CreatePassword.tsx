@@ -13,17 +13,17 @@ import "react-toastify/dist/ReactToastify.css";
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
   const password = React.useRef<string>("");
-  const [cnfPassword, setCnfPassword] = React.useState<string>("");
+  const cnfPassword = React.useRef<string>("");
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [passmatch, setPassmatch] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    if (password.current === cnfPassword && password.current !== "") {
+  const onPassChange = () => {
+    if (password.current === cnfPassword.current && password.current !== "") {
       setPassmatch(true);
       return;
     }
     setPassmatch(false);
-  }, [password, cnfPassword]);
+  };
 
   const handleSubmit = async () => {
     setFormSubmitted(true);
@@ -124,9 +124,9 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           type="password"
           className={styles.passInput}
           placeholder="Password"
-          value={password.current}
           onChange={(e) => {
             password.current = e.target.value;
+            onPassChange();
           }}
           required={true}
         />
@@ -134,9 +134,9 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           type="password"
           className={styles.confirmPassInput}
           placeholder="Confirm password"
-          value={cnfPassword}
           onChange={(e) => {
-            setCnfPassword(e.target.value);
+            cnfPassword.current = e.target.value;
+            onPassChange();
           }}
           required={true}
         />
