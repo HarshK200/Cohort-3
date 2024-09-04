@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import { supportedBlockchains, supportedSolanaRpcMethods } from "@/enums";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import axios from "axios";
-import { AnimatePresence, delay, easeIn, motion } from "framer-motion";
+import { AnimatePresence, easeIn, motion } from "framer-motion";
 import { SolanaLogo } from "@public/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown, faCaretUp, faCopy } from "@fortawesome/free-solid-svg-icons";
+import { faCaretUp, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import bcrypt from "bcryptjs";
@@ -27,7 +27,7 @@ const Wallet = () => {
   const [selectedAccount, setSelectedAccount] = React.useState<secureUser>();
   const [unlocked, setUnlocked] = React.useState<object>();
   const [passPopupOpen, setPassPopupOpen] = React.useState<boolean>(false);
-  const [password, setPassword] = React.useState<string>("");
+  const password = React.useRef<string>("");
   const [passPopupLoading, setPassPopupLoading] = React.useState<boolean>(false);
   const [selecteWalletDropdownOpen, setSelecteWalletDropdownOpen] = React.useState<boolean>(false);
   const [sendMoneyPopupOpen, setSendMoneyPopupOpen] = React.useState<boolean>(false);
@@ -102,7 +102,7 @@ const Wallet = () => {
         throw new Error("No hashed password found!");
       }
 
-      const correct = await bcrypt.compare(password, hashed_pass!);
+      const correct = await bcrypt.compare(password.current!, hashed_pass!);
       if (correct) {
         setPassPopupOpen(false);
         setPassPopupLoading(false);
@@ -133,7 +133,7 @@ const Wallet = () => {
     } finally {
       // setting the password to empty string after 5 minutes (UX so user doesn't have to enter pass every time)
       setTimeout(() => {
-        setPassword("");
+        password.current = "";
       }, 300000);
     }
   }
@@ -151,6 +151,7 @@ const Wallet = () => {
             password={password}
             setActiveSession={setActiveSession}
             setPassPopupOpen={setPassPopupOpen}
+            passPopupCallback={passPopupCallback}
             setSendMoneyPopupOpen={setSendMoneyPopupOpen}
           />
           <div className={styles.walletsContainer}>
@@ -183,7 +184,6 @@ const Wallet = () => {
           {passPopupOpen && (
             <EnterPassPopup
               password={password}
-              setPassword={setPassword}
               handleEnterPassSubmit={handleEnterPassSubmit}
               loading={passPopupLoading}
             />
@@ -269,13 +269,13 @@ const WalletContainer = ({
   ];
 
   const handleCopyPrivateKey = () => {
-    console.log("password inside callback: ", password);
+    console.log("password inside handleCopyPrivateKey: ", password);
 
     passPopupCallback.current = handleCopyPrivateKey;
-    if (password !== "") {
+    if (password.current !== "") {
       const reqData: decryptprivatekey_RequestData = {
         encrypted_private_key: wallet.encrypted_private_key,
-        password: password,
+        password: password.current!,
       };
 
       const response = axios.post("/api/decryptprivatekey", reqData).then(({ data }) => {

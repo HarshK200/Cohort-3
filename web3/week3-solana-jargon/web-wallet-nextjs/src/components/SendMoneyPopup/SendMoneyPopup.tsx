@@ -5,7 +5,7 @@ import React from "react";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { PublicKey } from "@solana/web3.js";
 
 const SendMoneyPopup: React.FC<SendMoneyPopup> = ({ password, setSendMoneyPopupOpen, activeSession, balance }) => {
@@ -35,7 +35,7 @@ const SendMoneyPopup: React.FC<SendMoneyPopup> = ({ password, setSendMoneyPopupO
     }
 
     const requestData: sendSol_RequestData = {
-      password: password,
+      password: password.current!,
       sender_pubkey: activeSession.active_wallet.public_key,
       sender_encryptedPrivatekey: activeSession.active_wallet.encrypted_private_key,
       reciever_publicKey: toPubKey,
@@ -56,7 +56,6 @@ const SendMoneyPopup: React.FC<SendMoneyPopup> = ({ password, setSendMoneyPopupO
 
   return (
     <motion.div
-      key={password}
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0 }}

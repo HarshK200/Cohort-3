@@ -2,7 +2,7 @@ import styles from "./EnterPassPopup.module.css";
 import { motion } from "framer-motion";
 import { PuffLoader } from "react-spinners";
 
-const EnterPassPopup: React.FC<EnterPassPopupProps> = ({ password, setPassword, handleEnterPassSubmit, loading }) => {
+const EnterPassPopup: React.FC<EnterPassPopupProps> = ({ password, handleEnterPassSubmit, loading }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0 }}
@@ -15,9 +15,8 @@ const EnterPassPopup: React.FC<EnterPassPopupProps> = ({ password, setPassword, 
         <input
           type="password"
           className={styles.passInput}
-          value={password}
           onChange={(e) => {
-            setPassword(e.target.value);
+            password.current = e.target.value;
           }}
         />
         <motion.button

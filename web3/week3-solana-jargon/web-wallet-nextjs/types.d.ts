@@ -29,7 +29,7 @@ interface CreatePassCompProps {
 }
 
 interface getEncryptedMnemonicReqData {
-  password: string;
+  password: React.MutableRefObject<string | undefined>;
   mnemonic: string[];
 }
 
@@ -87,14 +87,13 @@ interface WalletContainerComponenetProps {
   wallet: wallet;
   activeSession: recentActiveSessionInfo;
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
-  password: string;
+  password: React.MutableRefObject<string | undefined>;
   setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  passPopupCallback: React.MutableRefObject<((password: string) => void) | undefined>;
+  passPopupCallback: React.MutableRefObject<((password: React.MutableRefObject<string>) => void) | undefined>;
 }
 
 interface EnterPassPopupProps {
-  password: string;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  password: React.MutableRefObject<string | undefined>;
   handleEnterPassSubmit: () => Promise<void>;
   loading: boolean;
 }
@@ -107,14 +106,15 @@ interface generateWallet_RequestData {
 }
 
 interface walletActioBtnsComponentProps {
-  password: string;
+  password: React.MutableRefObject<string | undefined>;
   setPassPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setActiveSession: React.Dispatch<React.SetStateAction<recentActiveSessionInfo | undefined>>;
   setSendMoneyPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  passPopupCallback: React.MutableRefObject<(() => void) | undefined>;
 }
 
 interface SendMoneyPopup {
-  password: string;
+  password: React.MutableRefObject<string | undefined>;
   setSendMoneyPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeSession: recentActiveSessionInfo;
   balance: number;

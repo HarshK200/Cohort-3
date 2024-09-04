@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
   password,
   setPassPopupOpen,
+  passPopupCallback,
   setActiveSession,
   setSendMoneyPopupOpen,
 }) => {
@@ -33,13 +34,14 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
       const lastCreatedWallet = activeuser!?.wallets[activeuser!?.wallets.length - 1];
       const nextAvilWalletId = lastCreatedWallet.wallet_id + 1;
 
-      if (password === "") {
+      if (password.current === "") {
         toast.warn("please enter password and try again");
+        passPopupCallback.current = handleCreateWallet;
         setPassPopupOpen(true);
       } else {
         const requestData: generateWallet_RequestData = {
           blockchain_type: supportedBlockchains.Solana, // TODO: add a popup that asks for blockchain_type
-          password: password,
+          password: password.current!,
           encryptedMnemonic: activeuser!?.encryptedMnemonic,
           nextAvilWalletId: nextAvilWalletId,
         };
@@ -67,7 +69,7 @@ const WalletActionBtns: React.FC<walletActioBtnsComponentProps> = ({
   };
 
   const handleSendMoney = () => {
-    if (password === "") {
+    if (password.current === "") {
       setPassPopupOpen(true);
       toast.warn("please enter password and try again");
       return;

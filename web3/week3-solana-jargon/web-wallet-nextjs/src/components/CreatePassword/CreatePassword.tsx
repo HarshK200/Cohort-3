@@ -12,13 +12,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
-  const [password, setPassword] = React.useState<string>("");
+  const password = React.useRef<string>("");
   const [cnfPassword, setCnfPassword] = React.useState<string>("");
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [passmatch, setPassmatch] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (password === cnfPassword && password !== "") {
+    if (password.current === cnfPassword && password.current !== "") {
       setPassmatch(true);
       return;
     }
@@ -32,7 +32,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     if (!localStorage.getItem("secureUsers")) {
       const reqData: generateAccount_RequestData = {
         nextAvilAccountId: 0,
-        password: password,
+        password: password.current,
         mnemonic: mnemonic!,
         blockchain_type: selectedBlockhain,
       };
@@ -56,7 +56,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       const nextAvilId: number = secureUsers.length;
       const reqData: generateAccount_RequestData = {
         nextAvilAccountId: nextAvilId,
-        password: password,
+        password: password.current,
         mnemonic: mnemonic!,
         blockchain_type: selectedBlockhain,
       };
@@ -81,7 +81,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
   if (hashed_pass && unlocked) {
     const handlePassSubmit = async () => {
       setFormSubmitted(true);
-      const correct = await bcrypt.compare(password, hashed_pass);
+      const correct = await bcrypt.compare(password.current, hashed_pass);
       if (correct) {
         sessionStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
         await handleSubmit();
@@ -105,12 +105,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
 
     return (
       <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <EnterPassPopup
-          password={password}
-          setPassword={setPassword}
-          handleEnterPassSubmit={handlePassSubmit}
-          loading={formSubmitted}
-        />
+        <EnterPassPopup password={password} handleEnterPassSubmit={handlePassSubmit} loading={formSubmitted} />
         <ToastContainer />
       </div>
     );
@@ -129,9 +124,9 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           type="password"
           className={styles.passInput}
           placeholder="Password"
-          value={password}
+          value={password.current}
           onChange={(e) => {
-            setPassword(e.target.value);
+            password.current = e.target.value;
           }}
           required={true}
         />
