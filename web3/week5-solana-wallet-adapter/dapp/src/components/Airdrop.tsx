@@ -19,7 +19,7 @@ const Airdrop: React.FC = () => {
     console.log("airdropSignature: ", airdropSignature);
 
 
-    const transactionStatus = await connection.getSignatureStatus(airdropSignature);
+    const transactionStatus = await connection.getSignatureStatus(airdropSignature, {searchTransactionHistory: true});
     console.log("transactionResult: ", transactionStatus);
   }
 
