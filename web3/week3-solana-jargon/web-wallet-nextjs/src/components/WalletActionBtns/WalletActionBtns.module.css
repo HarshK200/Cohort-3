@@ -1,0 +1,51 @@
+.btnsContainer {
+  width: 100%;
+  display: flex;
+  padding-left: 7rem;
+  padding-right: 7rem;
+  padding-top: 4rem;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.createWalletBtn {
+  transition: opacity 0.15s;
+  border: 1px solid black;
+  padding: 1rem 2rem;
+  border: 1px solid white;
+}
+.createWalletBtn:hover {
+  border: 1px solid #334155;
+  opacity: 80%;
+  border: 1px solid white;
+}
+
+.sendMoneyBtn {
+  transition: opacity 0.15s;
+  border: 1px solid black;
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 1rem;
+  border: 1px solid white;
+}
+
+.sendMoneyBtn:hover {
+  border: 1px solid #334155;
+  opacity: 80%;
+  border: 1px solid white;
+}
+
+.recieveMoneyBtn {
+  transition: opacity 0.15s;
+  border: 1px solid black;
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 1rem;
+  border: 1px solid white;
+}
+
+.recieveMoneyBtn:hover {
+  border: 1px solid #334155;
+  opacity: 80%;
+  border: 1px solid white;
+}

@@ -1,0 +1,18 @@
+* {
+  background-color: #2a2a2a;
+  color: white;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 3rem;
+}
+
+.wallet-btns-container {
+  width: 30%;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+}

@@ -1,40 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import styles from "./CreatePassword.module.css";
-import { FormEvent } from "react";
 import React from "react";
 import { PuffLoader } from "react-spinners";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import * as bcrypt from "bcryptjs";
-import { toast } from "react-toastify";
-import { handleClientScriptLoad } from "next/script";
+import { toast, ToastContainer } from "react-toastify";
+import EnterPassPopup from "../EnterPassPopup/EnterPassPopup";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlockhain }) => {
   const router = useRouter();
-  const [password, setPassword] = React.useState<string>("");
-  const [cnfPassword, setCnfPassword] = React.useState<string>("");
+  const password = React.useRef<string>("");
+  const cnfPassword = React.useRef<string>("");
   const [formSubmitted, setFormSubmitted] = React.useState<boolean>(false);
   const [passmatch, setPassmatch] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    if (password === cnfPassword && password !== "") {
+  const onPassChange = () => {
+    if (password.current === cnfPassword.current && password.current !== "") {
       setPassmatch(true);
       return;
     }
     setPassmatch(false);
-  }, [password, cnfPassword]);
+  };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setFormSubmitted(true);
 
     // When user is onboaring for the first time
     if (!localStorage.getItem("secureUsers")) {
       const reqData: generateAccount_RequestData = {
         nextAvilAccountId: 0,
-        password: password,
+        password: password.current,
         mnemonic: mnemonic!,
         blockchain_type: selectedBlockhain,
       };
@@ -50,7 +48,8 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
         active_wallet: newSecureUser.wallets[0],
       };
       localStorage.setItem("recentActiveSession", JSON.stringify(recentActiveSession));
-      router.push("/")
+      router.push("/");
+      return;
     }
     // when user already has account and creating a new one
     else {
@@ -58,7 +57,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       const nextAvilId: number = secureUsers.length;
       const reqData: generateAccount_RequestData = {
         nextAvilAccountId: nextAvilId,
-        password: password,
+        password: password.current,
         mnemonic: mnemonic!,
         blockchain_type: selectedBlockhain,
       };
@@ -66,6 +65,7 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
       const newSecureUser = response.data.secureuser as secureUser;
       secureUsers.push(newSecureUser);
       localStorage.setItem("secureUsers", JSON.stringify(secureUsers));
+      // making the current account and wallet to be active
       const recentActiveSession: recentActiveSessionInfo = {
         active_accountId: nextAvilId,
         active_wallet: newSecureUser.wallets[0],
@@ -78,14 +78,14 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
   };
 
   const hashed_pass = localStorage.getItem("hashed_pass");
-  if (hashed_pass) {
-    const handlePassSubmit = async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  const unlocked = sessionStorage.getItem("unlocked");
+  if (hashed_pass && unlocked) {
+    const handlePassSubmit = async () => {
       setFormSubmitted(true);
-      const correct = await bcrypt.compare(password, hashed_pass);
+      const correct = await bcrypt.compare(password.current, hashed_pass);
       if (correct) {
         sessionStorage.setItem("unlocked", JSON.stringify({ unlocked: true }));
-        await handleSubmit(e);
+        await handleSubmit();
         return;
       } else {
         toast.error("Incorrect password!", {
@@ -105,34 +105,16 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
     };
 
     return (
-      <form className={styles.form} onSubmit={handlePassSubmit}>
-        <h1>Enter password</h1>
-        <input
-          type="password"
-          className={styles.passInput}
-          placeholder="Password"
-          value={password}
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          required={true}
-        />
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 1.01 }}
-          type="submit"
-          className={`btn glass ${styles.submitbtn} ${formSubmitted ? "disabled" : ""} `}
-        >
-          <PuffLoader loading={formSubmitted} color="white" size={30} />
-          <span>Submit</span>
-        </motion.button>
-      </form>
+      <div style={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <EnterPassPopup password={password} handleEnterPassSubmit={handlePassSubmit} loading={formSubmitted} />
+        <ToastContainer />
+      </div>
     );
   }
 
   return (
     <main className={styles.main}>
-      <form className={styles.form} onSubmit={handleSubmit}>
+      <div className={styles.form}>
         <h1>Create your password</h1>
         <div className={styles.infoTextContainer}>
           <FontAwesomeIcon icon={faInfoCircle} className={styles.infoIcon} />
@@ -143,9 +125,9 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           type="password"
           className={styles.passInput}
           placeholder="Password"
-          value={password}
           onChange={(e) => {
-            setPassword(e.target.value);
+            password.current = e.target.value;
+            onPassChange();
           }}
           required={true}
         />
@@ -153,20 +135,21 @@ const CreatePassword: React.FC<CreatePassCompProps> = ({ mnemonic, selectedBlock
           type="password"
           className={styles.confirmPassInput}
           placeholder="Confirm password"
-          value={cnfPassword}
           onChange={(e) => {
-            setCnfPassword(e.target.value);
+            cnfPassword.current = e.target.value;
+            onPassChange();
           }}
           required={true}
         />
         <button
           type="submit"
           className={`btn glass ${styles.submitbtn} ${formSubmitted || !passmatch ? "disabled" : ""} `}
+          onClick={handleSubmit}
         >
           <PuffLoader loading={formSubmitted} color="white" size={30} />
           <span>Submit</span>
         </button>
-      </form>
+      </div>
     </main>
   );
 };

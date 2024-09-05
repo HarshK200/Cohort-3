@@ -82,15 +82,17 @@ const Sidebar: React.FC<{
               />
             );
           })}
-          <motion.div
-            whileHover={{ scale: 1.2 }}
-            className={styles.addAccountPlus}
-            onClick={() => {
-              router.push("/onboarding");
-            }}
-          >
-            <FontAwesomeIcon icon={faPlus} />
-          </motion.div>
+          <div className={styles.addAccountPlusContainer}>
+            <motion.div
+              whileHover={{ scale: 1.2 }}
+              className={styles.addAccountPlus}
+              onClick={() => {
+                router.push("/onboarding");
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </motion.div>
+          </div>
         </div>
       </motion.nav>
     );
@@ -110,6 +112,7 @@ const Account: React.FC<AccountComponentProps> = ({ user, activeSession, setActi
   return (
     <motion.div
       whileHover={{ scale: 1.15 }}
+      whileTap={{ scale: 1 }}
       className={`${styles.user} ${activeSession.active_accountId === user.accountId ? styles.activeUser : ""}`}
       onClick={handleClick}
     >

@@ -1,7 +1,7 @@
 import styles from "./OnboardingOptions.module.css";
 import { motion } from "framer-motion";
 
-const OnboardingOptions: React.FC<OnboardingOptsComponentProps> = ({ currentComponent, setCurrentComponent }) => {
+const OnboardingOptions: React.FC<OnboardingOptsComponentProps> = ({ setCurrentComponent }) => {
   return (
     <main className={`${styles.btnContainer}`}>
       <motion.button

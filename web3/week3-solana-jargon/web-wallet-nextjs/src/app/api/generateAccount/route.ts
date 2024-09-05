@@ -1,6 +1,6 @@
 import Cryptr from "cryptr";
 import { NextRequest, NextResponse } from "next/server";
-import { Keypair, PublicKey } from "@solana/web3.js";
+import { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import { mnemonicToSeedSync } from "bip39";
 import { derivePath } from "ed25519-hd-key";
@@ -25,6 +25,7 @@ function generateForSolana(mnemonic_words_array: string[]): { publickey: string;
   const publickey = publicKey.toBase58();
   const privatekey = bs58.encode(secretKey);
 
+  console.log("priavtekey: ", privatekey);
   return { publickey, privatekey };
 }
 
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
     const encryptedPrivateKey = cryptr.encrypt(keyPair.privatekey);
 
     const newWallet: wallet = {
+      wallet_id: 0, // wallet id 0 since user is creating a new account
       blockchain_type: supportedBlockchains.Solana,
       encrypted_private_key: encryptedPrivateKey,
       public_key: keyPair.publickey,
