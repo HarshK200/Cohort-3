@@ -1,0 +1,14 @@
+{
+  "name": "week4-datamodel-tokens",
+  "version": "1.0.0",
+  "description": "",
+  "main": "solana-token.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.95.3"
+  }
+}

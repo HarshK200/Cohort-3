@@ -1,0 +1,39 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  padding: 4rem;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.dapp-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.airdrop-div {
+  display: flex;
+  height: 2.5rem;
+  gap: 2rem;
+  margin: 2rem;
+}
+
+.airdrop-div input {
+  width: 18rem;
+  padding: 0 1rem;
+  background-color: #faf9f6;
+  border-radius: 3px;
+  border: 0;
+  color: black;
+  outline: none;
+}
+
+.airdrop-div button {
+  padding: 0.5rem;
+  font-weight: bolder;
+  border: 1px solid white;
+  border-radius: 3px;
+  cursor: pointer;
+}
