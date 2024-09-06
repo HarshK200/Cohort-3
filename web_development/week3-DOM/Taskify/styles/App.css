@@ -1,0 +1,8 @@
+@import url("./Navbar.css");
+@import url("./CategoriesContainer.css");
+
+.app-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

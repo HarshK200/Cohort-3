@@ -1,0 +1,9 @@
+.navContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  padding: 3rem 0;
+  font-size: 2rem;
+}

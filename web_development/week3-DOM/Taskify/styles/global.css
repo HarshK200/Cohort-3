@@ -1,0 +1,23 @@
+:root {
+  --bg-secondary: #16423c;
+  --bg-primary: #6a9c89;
+  --fg-secondary: #c4dad2;
+  --fg-primary: #e9efec;
+}
+
+* {
+  margin: 0;
+  border: 0;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: var(--fg-primary);
+  color: var(--bg-primary);
+}
