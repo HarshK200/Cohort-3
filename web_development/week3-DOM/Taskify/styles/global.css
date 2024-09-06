@@ -12,13 +12,9 @@
 }
 
 body {
-  height: 100vh;
-  width: 100vw;
 }
 
 #root {
-  height: 100%;
-  width: 100%;
   background-color: var(--fg-primary);
   color: var(--bg-secondary);
 }

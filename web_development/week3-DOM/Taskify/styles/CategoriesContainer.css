@@ -49,8 +49,24 @@
   margin: 0.5rem 0;
   justify-content: space-between;
   cursor: pointer;
+  font-weight: 900;
 }
 
 .addTodoBtn:hover {
   opacity: 90%;
+}
+
+.urgency-label {
+  display: inline-flex;
+  font-size: 0.9rem !important;
+  color: white;
+  padding: 0.2rem 1.3rem !important;
+  border-radius: 2rem;
+}
+
+.meta-data-div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0.8rem 0;
 }

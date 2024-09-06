@@ -29,7 +29,21 @@ const Category = (category, TODOS, reRender) => {
   const addTodoBtn = document.createElement("button");
   addTodoBtn.classList.add("addTodoBtn");
   addTodoBtn.textContent = "Add Todo";
-  addTodoBtn.onclick = () => {};
+
+  addTodoBtn.onclick = () => {
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    const uniqueId = getUniqueId();
+    TODOS[uniqueId] = {
+      id: uniqueId,
+      title: "test3",
+      content: "adlkfjasklfj",
+      category: "To Do",
+      urgency: "urgent",
+      timestamp: new Date().toLocaleDateString("en-US", options),
+    };
+
+    reRender();
+  };
 
   categoryDiv.appendChild(categoryTitle);
   categoryDiv.appendChild(todosDiv);
@@ -37,6 +51,10 @@ const Category = (category, TODOS, reRender) => {
 
   return categoryDiv;
 };
+
+function getUniqueId() {
+  return Date.now().toString(36);
+}
 
 const Todo = (TODO, reRender) => {
   const todoDiv = document.createElement("div");
@@ -53,11 +71,30 @@ const Todo = (TODO, reRender) => {
   textContainer.appendChild(title);
   textContainer.appendChild(content);
 
+  const metaDataDiv = document.createElement("div");
+  metaDataDiv.classList.add("meta-data-div");
+
   const timestamp = document.createElement("p");
   timestamp.textContent = TODO.timestamp;
 
+  const urgency = document.createElement("h3");
+  urgency.textContent = TODO.urgency;
+  urgency.classList.add("urgency-label");
+  if (TODO.urgency === "urgent") {
+    urgency.style.backgroundColor = `#FF6B6B`;
+  } else if (TODO.urgency == "medium") {
+    urgency.style.backgroundColor = `#FFA235`;
+  } else if (TODO.urgency === "low") {
+    urgency.style.backgroundColor = `#0ECC5A`;
+  } else {
+    urgency.style.backgroundColor = `gray`;
+  }
+
+  metaDataDiv.appendChild(urgency);
+  metaDataDiv.appendChild(timestamp);
+
   todoDiv.appendChild(textContainer);
-  todoDiv.appendChild(timestamp);
+  todoDiv.appendChild(metaDataDiv);
 
   return todoDiv;
 };

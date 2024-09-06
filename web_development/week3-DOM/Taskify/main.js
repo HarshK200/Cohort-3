@@ -22,7 +22,7 @@ const TODOS = {
     title: "test",
     content: "adlkfjasklfj",
     category: "To Do",
-    urgency: "high",
+    urgency: "urgent",
     timestamp: new Date().toLocaleDateString("en-US", options),
   },
   2: {
@@ -30,7 +30,7 @@ const TODOS = {
     title: "test2",
     content: "adlkfjasklfj",
     category: "In Progress",
-    urgency: "low",
+    urgency: "medium",
     timestamp: new Date().toLocaleDateString("en-US", options),
   },
   3: {
@@ -38,7 +38,7 @@ const TODOS = {
     title: "test3",
     content: "adlkfjasklfj",
     category: "On Hold",
-    urgency: "low",
+    urgency: "none",
     timestamp: new Date().toLocaleDateString("en-US", options),
   },
 };
