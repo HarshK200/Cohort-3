@@ -1,6 +1,6 @@
 .categories-container {
   display: grid;
-  grid-template-rows: 1fr;
+  grid-template-rows: auto;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   padding: 3rem 6rem;
   grid-gap: 1rem;

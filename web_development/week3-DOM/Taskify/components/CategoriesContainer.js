@@ -35,10 +35,10 @@ const Category = (category, TODOS, reRender) => {
     const uniqueId = getUniqueId();
     TODOS[uniqueId] = {
       id: uniqueId,
-      title: "test3",
-      content: "adlkfjasklfj",
-      category: "To Do",
-      urgency: "urgent",
+      title: "Untitled",
+      content: " ",
+      category: category,
+      urgency: "none",
       timestamp: new Date().toLocaleDateString("en-US", options),
     };
 
