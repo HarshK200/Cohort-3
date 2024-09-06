@@ -20,10 +20,7 @@ const Category = (category, TODOS, reRender) => {
   todosDiv.classList.add("todos-container");
   Object.keys(TODOS).forEach((key) => {
     if (TODOS[key].category == category)
-      todosDiv.appendChild(Todo(TODOS[key], reRender));
-  });
-  Object.keys((key) => {
-    todosDiv.appendChild(Todo(TODOS[key], reRender));
+      todosDiv.appendChild(Todo(TODOS[key], reRender, TODOS));
   });
 
   const addTodoBtn = document.createElement("button");
@@ -36,7 +33,7 @@ const Category = (category, TODOS, reRender) => {
     TODOS[uniqueId] = {
       id: uniqueId,
       title: "Untitled",
-      content: " ",
+      content: ".... ",
       category: category,
       urgency: "none",
       timestamp: new Date().toLocaleDateString("en-US", options),
@@ -56,17 +53,28 @@ function getUniqueId() {
   return Date.now().toString(36);
 }
 
-const Todo = (TODO, reRender) => {
+const Todo = (TODO, reRender, TODOS) => {
   const todoDiv = document.createElement("div");
   todoDiv.classList.add("todo-div");
   todoDiv.draggable = true;
 
   const textContainer = document.createElement("div");
+  textContainer.classList.add("text-container");
 
-  const title = document.createElement("h2");
-  title.textContent = TODO.title;
-  const content = document.createElement("p");
-  content.textContent = TODO.content;
+  const title = document.createElement("textarea");
+  title.value = TODO.title;
+  title.classList.add("todo-title");
+  title.onchange = (e) => {
+    TODO.title = e.target.value;
+    reRender();
+  };
+  const content = document.createElement("textarea");
+  content.value = TODO.content;
+  content.classList.add("todo-content");
+  content.onchange = (e) => {
+    TODO.content = e.target.value;
+    reRender();
+  };
 
   textContainer.appendChild(title);
   textContainer.appendChild(content);
