@@ -67,8 +67,21 @@
 .meta-data-div {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin: 0.8rem 0;
+  justify-content: space-between;
+  margin: 0.5rem 0;
+}
+
+.todo-footer-div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.delete-btn {
+  font-family: Font Awesome\5 Free;
+  color: #ff6b6b;
+  cursor: pointer;
+  padding: 1rem;
 }
 
 .text-container textarea {
@@ -76,6 +89,11 @@
   display: flex;
   width: 100%;
   resize: none;
+}
+
+.text-container textarea:focus {
+  outline: 1px solid var(--bg-primary);
+  border-radius: 0.3rem;
 }
 
 .todo-title {

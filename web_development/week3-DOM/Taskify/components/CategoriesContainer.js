@@ -1,3 +1,5 @@
+let SELECTED = null;
+
 const CategoriesContainer = (CATEGORIES, TODOS, reRender) => {
   const categoriesContainer = document.createElement("div");
   categoriesContainer.classList.add("categories-container");
@@ -42,6 +44,17 @@ const Category = (category, TODOS, reRender) => {
     reRender();
   };
 
+  categoryDiv.addEventListener("dragover", (e) => {
+    e.preventDefault();
+  });
+  categoryDiv.addEventListener("drop", (e) => {
+    categoryDiv.appendChild(SELECTED);
+    const selectedId = SELECTED.id;
+    TODOS[selectedId] = { ...TODOS[SELECTED.id], category: category };
+    SELECTED = null;
+    reRender();
+  });
+
   categoryDiv.appendChild(categoryTitle);
   categoryDiv.appendChild(todosDiv);
   categoryDiv.appendChild(addTodoBtn);
@@ -57,6 +70,7 @@ const Todo = (TODO, reRender, TODOS) => {
   const todoDiv = document.createElement("div");
   todoDiv.classList.add("todo-div");
   todoDiv.draggable = true;
+  todoDiv.id = TODO.id;
 
   const textContainer = document.createElement("div");
   textContainer.classList.add("text-container");
@@ -98,8 +112,28 @@ const Todo = (TODO, reRender, TODOS) => {
     urgency.style.backgroundColor = `gray`;
   }
 
-  metaDataDiv.appendChild(urgency);
-  metaDataDiv.appendChild(timestamp);
+  todoDiv.addEventListener("dragstart", (e) => {
+    SELECTED = e.target;
+  });
+
+  const clockIcon = document.createElement("i");
+  clockIcon.classList.add("fa-regular", "fa-clock");
+
+  const deleteBtn = document.createElement("i");
+  deleteBtn.classList.add("fa-solid", "fa-trash", "delete-btn");
+  deleteBtn.onclick = () => {
+    delete TODOS[todoDiv.id];
+    reRender();
+  };
+
+  const todofooterDiv = document.createElement("div");
+  todofooterDiv.classList.add("todo-footer-div");
+  todofooterDiv.appendChild(urgency);
+  todofooterDiv.appendChild(clockIcon);
+  todofooterDiv.appendChild(timestamp);
+
+  metaDataDiv.appendChild(todofooterDiv);
+  metaDataDiv.appendChild(deleteBtn);
 
   todoDiv.appendChild(textContainer);
   todoDiv.appendChild(metaDataDiv);
