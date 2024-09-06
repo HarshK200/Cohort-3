@@ -1,10 +1,56 @@
-.todos-container {
+.categories-container {
   display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  padding: 8rem 6rem;
+  padding: 3rem 6rem;
   grid-gap: 1rem;
 }
 
 .category-div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-div h3 {
+  padding: 1rem 0.5rem;
+  font-size: 1rem;
+}
+
+.todos-container {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+}
+
+.todo-div {
+  padding: 1rem;
+  background-color: var(--fg-secondary);
+  border-radius: 0.3rem;
+  border: 1px solid var(--bg-primary);
+}
+
+.todo-div h2 {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.todo-div p {
+  color: var(--bg-primary);
+  font-weight: 900;
+}
+
+.addTodoBtn {
+  background-color: var(--bg-secondary);
+  color: var(--fg-primary);
+  padding: 1rem;
+  display: flex;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.addTodoBtn:hover {
+  opacity: 90%;
 }
