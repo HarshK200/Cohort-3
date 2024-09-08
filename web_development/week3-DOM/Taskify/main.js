@@ -7,7 +7,6 @@ const CATEGORIES = {
   2: "Completed",
   3: "On Hold",
 };
-const options = { year: "numeric", month: "short", day: "numeric" };
 let TODOS = {};
 if (localStorage.getItem("TODOS")) {
   TODOS = JSON.parse(localStorage.getItem("TODOS"));
