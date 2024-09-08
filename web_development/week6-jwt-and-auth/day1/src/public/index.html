@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple Auth</title>
+    <!-- <link href="css/style.css" rel="stylesheet"> -->
+  </head>
+  <body>
+    <div>
+      Signup
+      <input type="text" placeholder="username..." id="signup-username" />
+      <input type="text" placeholder="password..." id="signup-password" />
+      <button onclick="signup()">Signup</button>
+    </div>
+    <div>
+      SignIn
+      <input type="text" placeholder="username..." id="signin-username" />
+      <input type="text" placeholder="password..." id="signin-password" />
+      <button onclick="signin()">SignIn</button>
+    </div>
+
+    <div id="userinfo">user info:</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script>
+      async function signup() {
+        console.log("signup was clicked");
+        const username = document.querySelector("#signup-username").value;
+        const password = document.querySelector("#signup-password").value;
+
+        const response = await axios.post("http://localhost:3000/signup", {
+          username: username,
+          password: password,
+        });
+        console.log(response.data);
+      }
+      async function signin() {
+        console.log("signin was clicked");
+        const username = document.querySelector("#signin-username").value;
+        const password = document.querySelector("#signin-password").value;
+        const response = await axios.post("http://localhost:3000/signin", {
+          username: username,
+          password: password,
+        });
+        console.log(response.data);
+        localStorage.setItem("token", response.data.token);
+
+        const userDatadiv = document.createElement("div");
+        const usernameH3 = document.createElement("h3");
+        usernameH3.textContent = username;
+        userDatadiv.appendChild(usernameH3);
+
+        const userinfoDiv = document.querySelector("#userinfo");
+        userinfoDiv.appendChild(userDatadiv);
+      }
+    </script>
+  </body>
+</html>
