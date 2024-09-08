@@ -14,4 +14,5 @@ const App = (CATEGORIES, TODOS, reRender) => {
 
   return AppDiv;
 };
+
 export default App;
