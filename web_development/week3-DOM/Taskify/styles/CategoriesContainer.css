@@ -57,11 +57,42 @@
 }
 
 .urgency-label {
+  position: relative;
   display: inline-flex;
   font-size: 0.9rem !important;
   color: white;
   padding: 0.2rem 1.3rem !important;
   border-radius: 2rem;
+  cursor: pointer;
+}
+
+.urgency-options {
+  position: absolute;
+  top: 1.7rem;
+  left: -0.5rem;
+  padding-top: 0.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.5rem;
+  transition: display 1s;
+  z-index: 2000;
+}
+
+.options-hidden {
+  display: none !important;
+}
+
+.urgency-option {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  transition: opacity ease-in-out 0.1s;
+  background-color: var(--bg-primary);
+  padding: 0.3rem 1rem;
+}
+
+.urgency-option:hover {
+  opacity: 80%;
 }
 
 .meta-data-div {

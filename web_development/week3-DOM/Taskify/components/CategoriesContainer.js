@@ -112,6 +112,30 @@ const Todo = (TODO, reRender, TODOS) => {
     urgency.style.backgroundColor = `gray`;
   }
 
+  urgency.onclick = () => {
+    if (selectUrgencyDiv.classList.contains("options-hidden")) {
+      selectUrgencyDiv.classList.remove("options-hidden");
+    } else {
+      selectUrgencyDiv.classList.add("options-hidden");
+    }
+  };
+
+  const UrgencyOptions = ["urgent", "medium", "low"];
+  const selectUrgencyDiv = document.createElement("div");
+  selectUrgencyDiv.classList.add("urgency-options", "options-hidden");
+  UrgencyOptions.map((option) => {
+    const optionDiv = document.createElement("div");
+    optionDiv.classList.add("urgency-option");
+    optionDiv.textContent = option;
+    optionDiv.onclick = () => {
+      TODO.urgency = option;
+      reRender();
+    };
+    selectUrgencyDiv.appendChild(optionDiv);
+  });
+
+  urgency.appendChild(selectUrgencyDiv);
+
   todoDiv.addEventListener("dragstart", (e) => {
     SELECTED = e.target;
   });
