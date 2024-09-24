@@ -17,11 +17,12 @@ const express_1 = __importDefault(require("express"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../db");
+const mongoose_1 = __importDefault(require("mongoose"));
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { firstName, lastName, email, password } = req.body;
-    if (!firstName || lastName || !email || !password) {
+    if (!firstName || !lastName || !email || !password) {
         return res.status(400).json({ msg: "all fields are required" });
     }
     const existing_user = yield db_1.UserModel.findOne({
@@ -34,6 +35,7 @@ userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     const hashed_password = yield bcrypt_1.default.hash(password, 10);
     yield db_1.UserModel.create({
+        _id: new mongoose_1.default.Types.ObjectId,
         firstName: firstName,
         lastName: lastName,
         email: email,

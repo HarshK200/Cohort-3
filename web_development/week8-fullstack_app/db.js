@@ -4,7 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PurchaseModel = exports.CourseModel = exports.UserRole = exports.UserModel = void 0;
+exports.connectToMongo = connectToMongo;
 const mongoose_1 = __importDefault(require("mongoose"));
+function connectToMongo() {
+    try {
+        mongoose_1.default.connect(process.env.MONGODB_URL).then(() => {
+            console.log("mongoose connected!");
+        });
+    }
+    catch (e) {
+        console.log(`couldn't connect to mongodb error: ${e}`);
+    }
+}
 var UserRole;
 (function (UserRole) {
     UserRole["USER"] = "USER";
@@ -14,7 +25,7 @@ const User = new mongoose_1.default.Schema({
     _id: mongoose_1.default.Types.ObjectId,
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: {
         type: String,

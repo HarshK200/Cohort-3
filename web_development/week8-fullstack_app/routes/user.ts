@@ -2,13 +2,14 @@ import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { UserModel, UserRole } from "../db";
+import mongoose from "mongoose";
 
 const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
 
-  if (!firstName || lastName || !email || !password) {
+  if (!firstName || !lastName || !email || !password) {
     return res.status(400).json({ msg: "all fields are required" });
   }
 
@@ -23,6 +24,7 @@ userRouter.post("/signup", async (req, res) => {
 
   const hashed_password = await bcrypt.hash(password, 10);
   await UserModel.create({
+    _id: new mongoose.Types.ObjectId,
     firstName: firstName,
     lastName: lastName,
     email: email,

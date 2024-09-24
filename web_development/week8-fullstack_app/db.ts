@@ -1,5 +1,15 @@
 import mongoose from "mongoose";
 
+function connectToMongo() {
+  try {
+    mongoose.connect(process.env.MONGODB_URL!).then(() => {
+      console.log("mongoose connected!");
+    });
+  } catch (e) {
+    console.log(`couldn't connect to mongodb error: ${e}`);
+  }
+}
+
 enum UserRole {
   USER = "USER",
   CREATOR = "CREATOR",
@@ -9,7 +19,7 @@ const User = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   role: {
     type: String,
@@ -37,4 +47,4 @@ const UserModel = mongoose.model("users", User);
 const CourseModel = mongoose.model("courses", Course);
 const PurchaseModel = mongoose.model("purchases", Purchase);
 
-export { UserModel, UserRole, CourseModel, PurchaseModel };
+export { UserModel, UserRole, CourseModel, PurchaseModel, connectToMongo };
