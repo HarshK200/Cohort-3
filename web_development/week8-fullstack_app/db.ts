@@ -1,13 +1,16 @@
 import mongoose from "mongoose";
 
 function connectToMongo() {
-  try {
-    mongoose.connect(process.env.MONGODB_URL!).then(() => {
+  return new Promise<boolean>(async (resolve, _reject) => {
+    try {
+      await mongoose.connect(process.env.MONGODB_URL!);
       console.log("mongoose connected!");
-    });
-  } catch (e) {
-    console.log(`couldn't connect to mongodb error: ${e}`);
-  }
+      resolve(true);
+    } catch (e) {
+      console.log(`couldn't connect to mongodb error: ${e}`);
+      resolve(false);
+    }
+  });
 }
 
 enum UserRole {

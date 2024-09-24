@@ -6,7 +6,6 @@ import { coursesRouter } from "./routes/courses";
 import { connectToMongo } from "./db";
 
 dotenv.config();
-connectToMongo();
 const app = express();
 const PORT = 3000;
 
@@ -18,6 +17,17 @@ app.use("/api/v1/creator", creatorRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/courses", coursesRouter);
 
-app.listen(PORT, () => {
-  console.log(`server listening on port ${PORT}`);
-});
+async function main() {
+  const connected = await connectToMongo();
+
+  if (!connected) {
+    console.log("server startup canceled...");
+    return;
+  }
+
+  app.listen(PORT, () => {
+    console.log(`server listening on port ${PORT}`);
+  });
+}
+
+main();
