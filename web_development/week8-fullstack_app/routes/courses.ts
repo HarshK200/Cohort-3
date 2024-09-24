@@ -1,5 +1,5 @@
 import express from "express";
-import { auth } from "../middlewares/auth";
+import { userAuth } from "../middlewares/auth";
 
 const coursesRouter = express.Router();
 
@@ -12,6 +12,6 @@ coursesRouter.get("/courseid/preview", (_req, res) => {
 });
 
 // NOTE: endpoint hit when purchasing a course authentication required
-coursesRouter.post("/courseid/purchase", auth, (_req, _res) => {});
+coursesRouter.post("/courseid/purchase", userAuth, (_req, _res) => {});
 
 export { coursesRouter };

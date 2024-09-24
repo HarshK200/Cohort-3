@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
+import { Request, Response } from "express";
 
-function auth(req: any, res: any, next: any) {
-  //TODO: authentication logic
-  const { token }: { token: string } = req.headers;
+function userAuth(req: Request, res: Response, next: any) {
+  const token = req.headers["authorization"]?.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
   if (!token) {
     return res
       .status(403)
@@ -25,4 +25,8 @@ function auth(req: any, res: any, next: any) {
   }
 }
 
-export { auth };
+function creatorAuth(req: Request, res: Response, next: any) {
+  // TODO: authentication logic for creatorAuth
+}
+
+export { userAuth, creatorAuth };
