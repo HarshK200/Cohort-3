@@ -12,16 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userRouter = void 0;
+exports.creatorRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../db");
-const mongoose_1 = __importDefault(require("mongoose"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const zod_1 = require("zod");
-const userRouter = express_1.default.Router();
-exports.userRouter = userRouter;
-userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const mongoose_1 = __importDefault(require("mongoose"));
+const creatorRouter = express_1.default.Router();
+exports.creatorRouter = creatorRouter;
+// NOTE: right now the code looks repetitive/similar to userRouter signup but this gives flexibility to add more fields in the future
+creatorRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { firstName, lastName, email, password } = req.body;
     const formData = { firstName, lastName, email, password };
     const formDataValidation = zod_1.z.object({
@@ -61,7 +62,7 @@ userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
             lastName: lastName,
             email: email,
             password: hashed_password,
-            role: db_1.UserRole.USER,
+            role: db_1.UserRole.CREATOR,
         });
         return res.status(200).json({ msg: "signup successful" });
     }
@@ -72,7 +73,7 @@ userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
             .json({ msg: "internal server error cannot register user" });
     }
 }));
-userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+creatorRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     const formData = {
         email,
@@ -92,22 +93,23 @@ userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         });
     }
     try {
-        const user = yield db_1.UserModel.findOne({
+        const creator = yield db_1.UserModel.findOne({
             email: email,
+            role: db_1.UserRole.CREATOR,
         });
-        if (!user) {
-            return res
-                .status(404)
-                .json({ msg: "user with email is not registered please signup" });
+        if (!creator) {
+            return res.status(404).json({
+                msg: "user with email not registered as creator please signup",
+            });
         }
-        const pass_correct = yield bcrypt_1.default.compare(password, user.password);
+        const pass_correct = yield bcrypt_1.default.compare(password, creator.password);
         if (!pass_correct) {
             return res.status(401).json({ msg: "error invalid credentials" });
         }
         const tokenPayload = {
-            userid: user._id,
+            creatorid: creator._id,
         };
-        const token = jsonwebtoken_1.default.sign(tokenPayload, process.env.JWT_SECRET_USER);
+        const token = jsonwebtoken_1.default.sign(tokenPayload, process.env.JWT_SECRET_CREATOR);
         return res.status(200).json({ msg: "signin successful!", token: token });
     }
     catch (e) {
@@ -115,5 +117,19 @@ userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.status(500).json({ msg: "internal server error" });
     }
 }));
-// TODO: shows all the courses bought by the signed-in user
-userRouter.get("/purchases", (_req, _res) => { });
+// TODO: route to creating a new course
+creatorRouter.post("/course", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const creatorid = req.body.creatorid;
+    const { title, description, imageurl, price } = req.body;
+    const course = yield db_1.CourseModel.create({
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageurl,
+        creatorid: creatorid,
+    });
+}));
+// TODO: route for updating the course
+creatorRouter.patch("/course", () => { });
+// TODO: returns all the courses the admin has
+creatorRouter.get("/course/bulk", () => { });

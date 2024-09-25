@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const user_1 = require("./routes/user");
-const admin_1 = require("./routes/admin");
+const creator_1 = require("./routes/creator");
 const courses_1 = require("./routes/courses");
 const db_1 = require("./db");
 dotenv_1.default.config();
@@ -24,7 +24,7 @@ const PORT = 3000;
 // middlewares
 app.use(express_1.default.json());
 // Routes
-app.use("/api/v1/creator", admin_1.creatorRouter);
+app.use("/api/v1/creator", creator_1.creatorRouter);
 app.use("/api/v1/user", user_1.userRouter);
 app.use("/api/v1/courses", courses_1.coursesRouter);
 function main() {

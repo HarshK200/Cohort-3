@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.coursesRouter = void 0;
 const express_1 = __importDefault(require("express"));
-const auth_1 = __importDefault(require("../middlewares/auth"));
+const auth_1 = require("../middlewares/auth");
 const coursesRouter = express_1.default.Router();
 exports.coursesRouter = coursesRouter;
 // NOTE: todo returns a list of all the courses available for purchase
@@ -15,4 +15,4 @@ coursesRouter.get("/courseid/preview", (_req, res) => {
     return res.status(200).json({ msg: "course preview endpoint" });
 });
 // NOTE: endpoint hit when purchasing a course authentication required
-coursesRouter.post("/courseid/purchase", auth_1.default, (_req, _res) => { });
+coursesRouter.post("/courseid/purchase", auth_1.userAuth, (_req, _res) => { });
