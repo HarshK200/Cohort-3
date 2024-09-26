@@ -20,6 +20,7 @@ const db_1 = require("../db");
 const mongoose_1 = __importDefault(require("mongoose"));
 const zod_1 = require("zod");
 const config_1 = require("../config");
+const auth_1 = require("../middlewares/auth");
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -115,5 +116,30 @@ userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         return res.status(500).json({ msg: "internal server error" });
     }
 }));
-// TODO: shows all the courses bought by the signed-in user
-userRouter.get("/purchases", (_req, _res) => { });
+userRouter.get("/purchases", auth_1.userAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userid = req.body.userid;
+    try {
+        // NOTE: checking if user exists or not
+        const user = yield db_1.UserModel.findOne({
+            _id: userid,
+        });
+        if (!user) {
+            return res.status(404).json({
+                msg: "user does not exist",
+            });
+        }
+        const userPurchases = yield db_1.PurchaseModel.find({
+            userid: userid,
+        });
+        return res.status(200).json({
+            msg: "successfully fetched all the user purchases",
+            userPurchases: userPurchases,
+        });
+    }
+    catch (e) {
+        console.log(`error while fetching user purchases: ${e}`);
+        return res.status(500).json({
+            msg: "Internal server error,couldn't fetch user purchases",
+        });
+    }
+}));

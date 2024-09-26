@@ -164,6 +164,7 @@ creatorRouter.post("/course", auth_1.creatorAuth, (req, res) => __awaiter(void 0
         });
     }
 }));
+// NOTE: route to update a course
 creatorRouter.patch("/course", auth_1.creatorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const creatorid = req.body.creatorid;
     const { title, description, imageurl, price, courseId } = req.body;
@@ -224,11 +225,10 @@ creatorRouter.patch("/course", auth_1.creatorAuth, (req, res) => __awaiter(void 
     }
 }));
 // TODO: returns all the courses the creator has
-creatorRouter.get("/course/bulk", auth_1.creatorAuth, (req, res) => {
+creatorRouter.get("/course/bulk", auth_1.creatorAuth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const creatorid = req.body.creatorid;
     try {
-        console.log(creatorid);
-        const courses = db_1.CourseModel.find({
+        const courses = yield db_1.CourseModel.find({
             creatorid: creatorid,
         });
         return res.status(200).json({
@@ -242,4 +242,4 @@ creatorRouter.get("/course/bulk", auth_1.creatorAuth, (req, res) => {
             msg: "internal server error while fetching courses",
         });
     }
-});
+}));

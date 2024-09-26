@@ -1,10 +1,11 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserModel } from "../db";
+import { PurchaseModel, UserModel } from "../db";
 import mongoose from "mongoose";
 import { z } from "zod";
 import { JWT_SECRET_USER } from "../config";
+import { userAuth } from "../middlewares/auth";
 
 const userRouter = express.Router();
 
@@ -116,7 +117,34 @@ userRouter.post("/signin", async (req, res) => {
   }
 });
 
-// TODO: shows all the courses bought by the signed-in user
-userRouter.get("/purchases", (_req, _res) => {});
+userRouter.get("/purchases", userAuth, async (req, res) => {
+  const userid = req.body.userid;
+
+  try {
+    // NOTE: checking if user exists or not
+    const user = await UserModel.findOne({
+      _id: userid,
+    });
+    if (!user) {
+      return res.status(404).json({
+        msg: "user does not exist",
+      });
+    }
+
+    const userPurchases = await PurchaseModel.find({
+      userid: userid,
+    });
+
+    return res.status(200).json({
+      msg: "successfully fetched all the user purchases",
+      userPurchases: userPurchases,
+    });
+  } catch (e) {
+    console.log(`error while fetching user purchases: ${e}`);
+    return res.status(500).json({
+      msg: "Internal server error,couldn't fetch user purchases",
+    });
+  }
+});
 
 export { userRouter };

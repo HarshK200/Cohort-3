@@ -32,7 +32,6 @@ function userAuth(req, res, next) {
 }
 function creatorAuth(req, res, next) {
     var _a;
-    // TODO: authentication logic for creatorAuth
     const token = (_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
     if (!token) {
         return res

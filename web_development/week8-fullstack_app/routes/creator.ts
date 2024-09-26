@@ -171,6 +171,7 @@ creatorRouter.post("/course", creatorAuth, async (req, res) => {
   }
 });
 
+// NOTE: route to update a course
 creatorRouter.patch("/course", creatorAuth, async (req, res) => {
   const creatorid = req.body.creatorid;
 
@@ -243,12 +244,11 @@ creatorRouter.patch("/course", creatorAuth, async (req, res) => {
 });
 
 // TODO: returns all the courses the creator has
-creatorRouter.get("/course/bulk", creatorAuth, (req, res) => {
+creatorRouter.get("/course/bulk", creatorAuth, async (req, res) => {
   const creatorid = req.body.creatorid;
 
   try {
-    console.log(creatorid);
-    const courses = CourseModel.find({
+    const courses = await CourseModel.find({
       creatorid: creatorid,
     });
 
