@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PurchaseModel = exports.CourseModel = exports.UserRole = exports.UserModel = void 0;
+exports.PurchaseModel = exports.CourseModel = exports.CreatorModel = exports.UserModel = void 0;
 exports.connectToMongo = connectToMongo;
 const mongoose_1 = __importDefault(require("mongoose"));
 function connectToMongo() {
@@ -28,22 +28,19 @@ function connectToMongo() {
         }
     }));
 }
-var UserRole;
-(function (UserRole) {
-    UserRole["USER"] = "USER";
-    UserRole["CREATOR"] = "CREATOR";
-})(UserRole || (exports.UserRole = UserRole = {}));
 const User = new mongoose_1.default.Schema({
     _id: mongoose_1.default.Types.ObjectId,
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: {
-        type: String,
-        enum: [UserRole.CREATOR, UserRole.USER],
-        default: UserRole.USER,
-    },
+});
+const Creator = new mongoose_1.default.Schema({
+    _id: mongoose_1.default.Types.ObjectId,
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
 });
 const Course = new mongoose_1.default.Schema({
     _id: mongoose_1.default.Types.ObjectId,
@@ -51,7 +48,11 @@ const Course = new mongoose_1.default.Schema({
     description: { type: String, required: true },
     price: { type: Number, required: true },
     imageUrl: { type: String, required: true },
-    creatorid: { type: mongoose_1.default.Types.ObjectId, ref: "users", required: true },
+    creatorid: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: "creators",
+        required: true,
+    },
 });
 const Purchase = new mongoose_1.default.Schema({
     _id: mongoose_1.default.Types.ObjectId,
@@ -60,6 +61,8 @@ const Purchase = new mongoose_1.default.Schema({
 });
 const UserModel = mongoose_1.default.model("users", User);
 exports.UserModel = UserModel;
+const CreatorModel = mongoose_1.default.model("creators", Creator);
+exports.CreatorModel = CreatorModel;
 const CourseModel = mongoose_1.default.model("courses", Course);
 exports.CourseModel = CourseModel;
 const PurchaseModel = mongoose_1.default.model("purchases", Purchase);

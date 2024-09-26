@@ -1,9 +1,10 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { UserModel, UserRole } from "../db";
+import { UserModel } from "../db";
 import mongoose from "mongoose";
 import { z } from "zod";
+import { JWT_SECRET_USER } from "../config";
 
 const userRouter = express.Router();
 
@@ -53,10 +54,9 @@ userRouter.post("/signup", async (req, res) => {
       lastName: lastName,
       email: email,
       password: hashed_password,
-      role: UserRole.USER,
     });
 
-    return res.status(200).json({ msg: "signup successful" });
+    return res.status(201).json({ msg: "signup successful" });
   } catch (e) {
     console.log(`error during creating new user in db: ${e}`);
     return res
@@ -107,7 +107,7 @@ userRouter.post("/signin", async (req, res) => {
     const tokenPayload = {
       userid: user._id,
     };
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET_USER!);
+    const token = jwt.sign(tokenPayload, JWT_SECRET_USER);
 
     return res.status(200).json({ msg: "signin successful!", token: token });
   } catch (e) {

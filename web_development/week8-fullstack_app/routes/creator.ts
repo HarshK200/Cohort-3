@@ -1,9 +1,11 @@
 import express from "express";
-import { CourseModel, UserModel, UserRole } from "../db";
+import { CourseModel, CreatorModel } from "../db";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { z } from "zod";
 import mongoose from "mongoose";
+import { JWT_SECRET_CREATOR } from "../config";
+import { creatorAuth } from "../middlewares/auth";
 
 const creatorRouter = express.Router();
 
@@ -36,7 +38,7 @@ creatorRouter.post("/signup", async (req, res) => {
     });
   }
 
-  const existing_user = await UserModel.findOne({
+  const existing_user = await CreatorModel.findOne({
     email: email,
   });
   if (existing_user) {
@@ -48,16 +50,15 @@ creatorRouter.post("/signup", async (req, res) => {
   const hashed_password = await bcrypt.hash(password, 10);
 
   try {
-    await UserModel.create({
+    await CreatorModel.create({
       _id: new mongoose.Types.ObjectId(),
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: hashed_password,
-      role: UserRole.CREATOR,
     });
 
-    return res.status(200).json({ msg: "signup successful" });
+    return res.status(201).json({ msg: "signup successful" });
   } catch (e) {
     console.log(`error during creating new user in db: ${e}`);
     return res
@@ -90,9 +91,8 @@ creatorRouter.post("/signin", async (req, res) => {
   }
 
   try {
-    const creator = await UserModel.findOne({
+    const creator = await CreatorModel.findOne({
       email: email,
-      role: UserRole.CREATOR,
     });
 
     if (!creator) {
@@ -109,7 +109,7 @@ creatorRouter.post("/signin", async (req, res) => {
     const tokenPayload = {
       creatorid: creator._id,
     };
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET_CREATOR!);
+    const token = jwt.sign(tokenPayload, JWT_SECRET_CREATOR);
 
     return res.status(200).json({ msg: "signin successful!", token: token });
   } catch (e) {
@@ -118,25 +118,151 @@ creatorRouter.post("/signin", async (req, res) => {
   }
 });
 
-// TODO: route to creating a new course
-creatorRouter.post("/course", async (req, res) => {
+creatorRouter.post("/course", creatorAuth, async (req, res) => {
   const creatorid = req.body.creatorid;
 
   const { title, description, imageurl, price } = req.body;
+  const courseData = {
+    title,
+    description,
+    imageurl,
+    price,
+  };
 
-  const course = await CourseModel.create({
-    title: title,
-    description: description,
-    price: price,
-    imageUrl: imageurl,
-    creatorid: creatorid,
+  const courseDataValidation = z.object({
+    title: z
+      .string()
+      .min(5, "title cannot be smaller than 5 characters")
+      .max(50, "title cannot be longer than 20 characters"),
+    description: z
+      .string()
+      .min(10, "description must be at least 10 characters long")
+      .max(300, "description cannot be longer than 300 characters"),
+    imageurl: z.string().url(),
+    price: z.number(),
   });
+
+  const validCourseData = courseDataValidation.safeParse(courseData);
+
+  if (!validCourseData.success) {
+    return res.status(400).json({
+      msg: validCourseData.error.issues[0].message,
+    });
+  }
+
+  try {
+    await CourseModel.create({
+      _id: new mongoose.Types.ObjectId(),
+      title: title,
+      description: description,
+      price: price,
+      imageUrl: imageurl,
+      creatorid: creatorid,
+    });
+
+    return res.status(201).json({
+      msg: "new course created successfully",
+    });
+  } catch (e) {
+    console.log(`error in creating new course: ${e}`);
+    return res.status(500).json({
+      msg: "internal server error while creating the course",
+    });
+  }
 });
 
-// TODO: route for updating the course
-creatorRouter.patch("/course", () => {});
+creatorRouter.patch("/course", creatorAuth, async (req, res) => {
+  const creatorid = req.body.creatorid;
 
-// TODO: returns all the courses the admin has
-creatorRouter.get("/course/bulk", () => {});
+  const { title, description, imageurl, price, courseId } = req.body;
+  const courseUpdateData = {
+    title,
+    description,
+    imageurl,
+    price,
+    courseId,
+  };
+
+  const courseUpdateDataValidation = z.object({
+    title: z
+      .string()
+      .min(5, "title cannot be smaller than 5 characters")
+      .max(20, "title cannot be longer than 20 characters"),
+    description: z
+      .string()
+      .min(10, "description must be at least 10 characters long")
+      .max(300, "description cannot be longer than 300 characters"),
+    imageurl: z.string().url(),
+    price: z.number(),
+    courseId: z.string(),
+  });
+
+  const validCourseData =
+    courseUpdateDataValidation.safeParse(courseUpdateData);
+
+  if (!validCourseData.success) {
+    return res.status(400).json({
+      msg: validCourseData.error.issues[0].message,
+    });
+  }
+
+  try {
+    const course = await CourseModel.findOne({
+      _id: courseId,
+      creatorid: creatorid,
+    });
+
+    if (!course) {
+      return res.status(404).json({
+        msg: "course does not exists",
+      });
+    }
+
+    await CourseModel.updateOne(
+      {
+        _id: courseId,
+        creatorid: creatorid,
+      },
+      {
+        title: title,
+        description: description,
+        price: price,
+        imageUrl: imageurl,
+      },
+    );
+
+    return res.status(201).json({
+      msg: "course updated successfully",
+    });
+  } catch (e) {
+    console.log(`error in updating course: ${e}`);
+    return res.status(500).json({
+      msg: "internal server error while updating the course",
+    });
+  }
+});
+
+// TODO: returns all the courses the creator has
+creatorRouter.get("/course/bulk", creatorAuth, (req, res) => {
+  const creatorid = req.body.creatorid;
+
+  try {
+    console.log(creatorid);
+    const courses = CourseModel.find({
+      creatorid: creatorid,
+    });
+
+    return res.status(200).json({
+      msg: "successfully fetched all courses",
+      courses: courses,
+    });
+  } catch (e) {
+    console.log(`error fetching courses for creator: ${e}`);
+
+    return res.status(500).json({
+      msg: "internal server error while fetching courses",
+    });
+  }
+});
 
 export { creatorRouter };

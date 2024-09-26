@@ -19,6 +19,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../db");
 const mongoose_1 = __importDefault(require("mongoose"));
 const zod_1 = require("zod");
+const config_1 = require("../config");
 const userRouter = express_1.default.Router();
 exports.userRouter = userRouter;
 userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -61,9 +62,8 @@ userRouter.post("/signup", (req, res) => __awaiter(void 0, void 0, void 0, funct
             lastName: lastName,
             email: email,
             password: hashed_password,
-            role: db_1.UserRole.USER,
         });
-        return res.status(200).json({ msg: "signup successful" });
+        return res.status(201).json({ msg: "signup successful" });
     }
     catch (e) {
         console.log(`error during creating new user in db: ${e}`);
@@ -107,7 +107,7 @@ userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
         const tokenPayload = {
             userid: user._id,
         };
-        const token = jsonwebtoken_1.default.sign(tokenPayload, process.env.JWT_SECRET_USER);
+        const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.JWT_SECRET_USER);
         return res.status(200).json({ msg: "signin successful!", token: token });
     }
     catch (e) {

@@ -1,11 +1,9 @@
 import express from "express";
-import dotenv from "dotenv";
 import { userRouter } from "./routes/user";
 import { creatorRouter } from "./routes/creator";
 import { coursesRouter } from "./routes/courses";
 import { connectToMongo } from "./db";
 
-dotenv.config();
 const app = express();
 const PORT = 3000;
 

@@ -13,22 +13,20 @@ function connectToMongo() {
   });
 }
 
-enum UserRole {
-  USER = "USER",
-  CREATOR = "CREATOR",
-}
-
 const User = new mongoose.Schema({
   _id: mongoose.Types.ObjectId,
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: {
-    type: String,
-    enum: [UserRole.CREATOR, UserRole.USER],
-    default: UserRole.USER,
-  },
+});
+
+const Creator = new mongoose.Schema({
+  _id: mongoose.Types.ObjectId,
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
 });
 
 const Course = new mongoose.Schema({
@@ -37,7 +35,11 @@ const Course = new mongoose.Schema({
   description: { type: String, required: true },
   price: { type: Number, required: true },
   imageUrl: { type: String, required: true },
-  creatorid: { type: mongoose.Types.ObjectId, ref: "users", required: true },
+  creatorid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "creators",
+    required: true,
+  },
 });
 
 const Purchase = new mongoose.Schema({
@@ -47,7 +49,8 @@ const Purchase = new mongoose.Schema({
 });
 
 const UserModel = mongoose.model("users", User);
+const CreatorModel = mongoose.model("creators", Creator);
 const CourseModel = mongoose.model("courses", Course);
 const PurchaseModel = mongoose.model("purchases", Purchase);
 
-export { UserModel, UserRole, CourseModel, PurchaseModel, connectToMongo };
+export { UserModel, CreatorModel, CourseModel, PurchaseModel, connectToMongo };

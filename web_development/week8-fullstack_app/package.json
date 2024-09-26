@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon --ext '.json, .ts' --exec 'npx tsc && node ./index.js'",
+    "start": "npx tsc && node ./index.js",
+    "dev": "npx nodemon --ext '.json, .ts' --exec 'npx tsc && node ./index.js'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

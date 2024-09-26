@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userAuth = userAuth;
 exports.creatorAuth = creatorAuth;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = require("../config");
 function userAuth(req, res, next) {
     var _a;
     const token = (_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
@@ -14,13 +15,12 @@ function userAuth(req, res, next) {
             .status(403)
             .json({ msg: "authentication token not provided. Please login/signup" });
     }
-    const JWT_SECRET = process.env.JWT_SECRET_USER;
-    if (!JWT_SECRET) {
+    if (!config_1.JWT_SECRET_USER) {
         console.log("Err: JWT_SECRET_USER env not provided!");
         return res.status(500).json({ msg: "internal server error!" });
     }
     try {
-        const verified = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+        const verified = jsonwebtoken_1.default.verify(token, config_1.JWT_SECRET_USER);
         req.body.userid = verified.userid;
         next();
     }
@@ -39,13 +39,12 @@ function creatorAuth(req, res, next) {
             .status(403)
             .json({ msg: "authentication token not provided. Please login/signup" });
     }
-    const JWT_SECRET = process.env.JWT_SECRET_CREATOR;
-    if (!JWT_SECRET) {
-        console.log("Err: JWT_SECRET env not provided!");
+    if (!config_1.JWT_SECRET_CREATOR) {
+        console.log("Err: JWT_SECRET_CREATOR env not provided!");
         return res.status(500).json({ msg: "internal server error!" });
     }
     try {
-        const verified = jsonwebtoken_1.default.verify(token, JWT_SECRET);
+        const verified = jsonwebtoken_1.default.verify(token, config_1.JWT_SECRET_CREATOR);
         req.body.creatorid = verified.creatorid;
         next();
     }
