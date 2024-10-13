@@ -55,6 +55,7 @@ coursesRouter.post("/courseid/purchase", auth_1.userAuth, (req, res) => __awaite
             });
         }
         // TODO: add razor pay or strip payment logic
+        // TODO: check if user has payed for the course or not?
         yield db_1.PurchaseModel.create({
             _id: new mongoose_1.default.Types.ObjectId(),
             userid: userid,

@@ -109,7 +109,8 @@ userRouter.post("/signin", (req, res) => __awaiter(void 0, void 0, void 0, funct
             userid: user._id,
         };
         const token = jsonwebtoken_1.default.sign(tokenPayload, config_1.JWT_SECRET_USER);
-        return res.status(200).json({ msg: "signin successful!", token: token });
+        res.cookie("jwt_token", token);
+        return res.status(200).json({ msg: "signin successful!" });
     }
     catch (e) {
         console.log(`err: ${e}`);

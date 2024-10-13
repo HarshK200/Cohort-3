@@ -8,8 +8,7 @@ exports.creatorAuth = creatorAuth;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
 function userAuth(req, res, next) {
-    var _a;
-    const token = (_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
+    const token = req.cookies["jwt_token"];
     if (!token) {
         return res
             .status(403)
@@ -31,8 +30,7 @@ function userAuth(req, res, next) {
     }
 }
 function creatorAuth(req, res, next) {
-    var _a;
-    const token = (_a = req.headers["authorization"]) === null || _a === void 0 ? void 0 : _a.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
+    const token = req.cookies["jwt_token"];
     if (!token) {
         return res
             .status(403)

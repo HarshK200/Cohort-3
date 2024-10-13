@@ -3,12 +3,15 @@ import { userRouter } from "./routes/user";
 import { creatorRouter } from "./routes/creator";
 import { coursesRouter } from "./routes/courses";
 import { connectToMongo } from "./db";
+//@ts-ignore
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 3000;
 
 // middlewares
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use("/api/v1/creator", creatorRouter);

@@ -17,10 +17,13 @@ const user_1 = require("./routes/user");
 const creator_1 = require("./routes/creator");
 const courses_1 = require("./routes/courses");
 const db_1 = require("./db");
+//@ts-ignore
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
 const PORT = 3000;
 // middlewares
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 // Routes
 app.use("/api/v1/creator", creator_1.creatorRouter);
 app.use("/api/v1/user", user_1.userRouter);

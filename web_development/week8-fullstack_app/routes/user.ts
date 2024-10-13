@@ -110,7 +110,8 @@ userRouter.post("/signin", async (req, res) => {
     };
     const token = jwt.sign(tokenPayload, JWT_SECRET_USER);
 
-    return res.status(200).json({ msg: "signin successful!", token: token });
+    res.cookie("jwt_token", token);
+    return res.status(200).json({ msg: "signin successful!" });
   } catch (e) {
     console.log(`err: ${e}`);
     return res.status(500).json({ msg: "internal server error" });

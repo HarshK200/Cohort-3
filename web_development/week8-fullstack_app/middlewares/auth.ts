@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { JWT_SECRET_CREATOR, JWT_SECRET_USER } from "../config";
 
 function userAuth(req: Request, res: Response, next: any) {
-  const token = req.headers["authorization"]?.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
+  const token = req.cookies["jwt_token"];
   if (!token) {
     return res
       .status(403)
@@ -29,7 +29,7 @@ function userAuth(req: Request, res: Response, next: any) {
 }
 
 function creatorAuth(req: Request, res: Response, next: any) {
-  const token = req.headers["authorization"]?.split(" ")[1]; // NOTE: assuming the authorization header has bearer attached to it
+  const token = req.cookies["jwt_token"];
 
   if (!token) {
     return res
