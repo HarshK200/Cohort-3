@@ -1,23 +1,28 @@
-import { useEffect, useState } from "react";
+import { Component, useEffect, useState } from "react";
+
+class ClassComponent extends Component {
+  state = { count: 0 };
+
+  // NOTE: you have to use arrow function here since if using an anonymous funciton the this keyword binding changes
+  increment = () => {
+    this.setState({ count: this.state.count + 1 });
+  };
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={this.increment}>+</button>
+      </div>
+    );
+  }
+}
 
 function App() {
   const [todos, setTodos] = useState([
     { title: "go to jym", done: false },
     { title: "go boom", done: false },
   ]);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setTodos((prev) => {
-        const popped = prev.pop();
-        return [popped, ...prev];
-      });
-    }, 1000);
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
 
   return (
     <div>
@@ -41,6 +46,8 @@ function App() {
             return <Todo key={idx} title={todo.title} done={todo.done} />;
           })
         : null}
+
+      <ClassComponent />
     </div>
   );
 }
@@ -51,6 +58,7 @@ function MyComp({ children }) {
 }
 
 function Todo({ title, done }) {
+  console.log("hi i rendered");
   return (
     <div>
       {title} - {done ? "done" : "not done"}
