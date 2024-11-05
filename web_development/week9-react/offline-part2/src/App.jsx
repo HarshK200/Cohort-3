@@ -1,4 +1,4 @@
-import { Component, useEffect, useState } from "react";
+import { Component, useEffect, useMemo, useState } from "react";
 
 class ClassComponent extends Component {
   state = { count: 0 };
@@ -24,6 +24,19 @@ function App() {
     { title: "go boom", done: false },
   ]);
 
+  const TodosComponents = useMemo(() => {
+    const components =
+      todos.length != 0
+        ? todos.map((todo, idx) => {
+            return <Todo key={idx} title={todo.title} done={todo.done} />;
+          })
+        : null;
+
+    return () => {
+      return <div>{components}</div>;
+    };
+  }, [todos]);
+
   return (
     <div>
       <MyComp>
@@ -40,13 +53,7 @@ function App() {
           including versions of Lorem Ipsum.
         </p>
       </MyComp>
-
-      {todos.length != 0
-        ? todos.map((todo, idx) => {
-            return <Todo key={idx} title={todo.title} done={todo.done} />;
-          })
-        : null}
-
+      <TodosComponents /> {/* NOTE: this was the culpret here*/}
       <ClassComponent />
     </div>
   );
