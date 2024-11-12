@@ -1,30 +1,48 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useFetch } from "./hooks/useFetch";
 import { usePrev } from "./hooks/usePrev";
+import { useDebounce } from "./hooks/useDebounce";
 
 function App() {
   const [glitch, setGlitch] = useState(1);
   const [count, setCount] = useState(0);
   const prev = usePrev(count);
+  const [inputVal, setInputVal] = useState("");
+  const debouncedVal = useDebounce(inputVal, 300);
+
+  useEffect(() => {
+    console.log("Hi i'm debounced");
+  }, [debouncedVal]);
 
   return (
     <div>
-      <h3>Count: {count}</h3>
-      <button
-        onClick={() => {
-          setCount((prev) => prev + 1);
-        }}
-      >
-        +
-      </button>
-      <button
-        onClick={() => {
-          setGlitch((prev) => prev + 1);
-        }}
-      >
-        Glitch
-      </button>
-      <p>The previous value was {prev}</p>
+      <div>
+        <h3>Count: {count}</h3>
+        <button
+          onClick={() => {
+            setCount((prev) => prev + 1);
+          }}
+        >
+          +
+        </button>
+        <button
+          onClick={() => {
+            setGlitch((prev) => prev + 1);
+          }}
+        >
+          Glitch
+        </button>
+        <p>The previous value was {prev}</p>
+      </div>
+      <div>
+        <input
+          type="text"
+          value={inputVal}
+          onChange={(e) => {
+            setInputVal(e.target.value);
+          }}
+        />
+      </div>
     </div>
   );
 }
